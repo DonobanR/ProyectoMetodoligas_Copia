@@ -1,4 +1,4 @@
-package servlets;
+package servlets.incrementosProyecto;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class AgregarDescuentoServlet extends HttpServlet {
                 stockStr == null || stockStr.isEmpty()) {
 
             request.setAttribute("mensaje", "Todos los campos obligatorios deben ser completados.");
-            request.getRequestDispatcher("agregarDescuento.jsp").forward(request, response);
+            request.getRequestDispatcher("formularioAgregarDescuento.jsp").forward(request, response);
             return;
         }
 
@@ -49,7 +49,6 @@ public class AgregarDescuentoServlet extends HttpServlet {
         descuento.setStock(stock);
 
         // Guardar el descuento en la base de datos
-        DescuentoDAO descuentoDAO = new DescuentoDAO();
         descuentoDAO.guardarDescuento(descuento);
 
         // Establecer un mensaje de éxito y reenviar a la página JSP

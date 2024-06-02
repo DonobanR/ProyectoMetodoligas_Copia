@@ -1,26 +1,20 @@
-package incrementos2;
+package servlets.incrementosProyecto;
 
 import dao.ProductoDAO;
-import entity.Producto;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import entity.Producto;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import jakarta.servlet.annotation.WebServlet;
-import util.HibernateUtil;
 
-
-//@WebServlet("/agregarProducto")
-public class AgregarProductoInventario extends HttpServlet {
-
+@WebServlet("/agregarProducto")
+public class AgregarProductoServlet extends HttpServlet {
     private ProductoDAO productoDAO = new ProductoDAO();
 
-    public AgregarProductoInventario(ProductoDAO productoDAO) {
-        this.productoDAO = productoDAO;
-    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nombre = request.getParameter("nombre");
@@ -39,6 +33,12 @@ public class AgregarProductoInventario extends HttpServlet {
 
         // Guardar el producto en la base de datos
         productoDAO.guardarProducto(producto);
+
+        // Redirigir a la página de gestión de inventario
+        response.sendRedirect("gestionInventario.jsp");
     }
 
+    public void setProductoDAO(ProductoDAO productoDAO) {
+        this.productoDAO = productoDAO;
+    }
 }

@@ -1,31 +1,61 @@
 <%@ page import="java.util.List" %>
 <%@ page import="dao.ProductoDAO" %>
 <%@ page import="entity.Producto" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Gesti&oacute;n de Inventario</title>
+    <title>Gestión de Inventario</title>
     <style>
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
-
         th {
             background-color: #f2f2f2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<h1>Gestion de Inventario</h1>
+<h1>Gestión de Inventario</h1>
 
 <h2>Buscar Producto</h2>
 <form id="searchForm">
@@ -37,7 +67,7 @@
         <option value="garantia">Garantía</option>
         <option value="stock">Stock</option>
     </select>
-    <label for="terminoBusqueda">Termino de busqueda:</label>
+    <label for="terminoBusqueda">Término de búsqueda:</label>
     <input type="text" id="terminoBusqueda" name="terminoBusqueda">
     <button type="submit">Buscar</button>
 </form>
@@ -48,7 +78,7 @@
         <th>Nombre</th>
         <th>Precio</th>
         <th>Marca</th>
-        <th>Garantia</th>
+        <th>Garantía</th>
         <th>Stock</th>
     </tr>
     <%
@@ -67,33 +97,54 @@
     <% } %>
 </table>
 
-<button onclick="mostrarFormulario()">Agregar Producto</button>
+<button id="agregarProductoBtn">Agregar Producto</button>
+
+<!-- Modal for adding product -->
+<div id="modalAgregarProducto" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Ingresar Detalles del Producto</h2>
+        <form id="agregarProductoForm" action="agregarProducto" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" step="0.01" required><br>
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" name="marca" required><br>
+            <label for="garantia">Garantía:</label>
+            <select id="garantia" name="garantia">
+                <option value="1">1 año</option>
+                <option value="2">2 años</option>
+                <option value="3">3 años</option>
+                <option value="4">4 años</option>
+                <option value="5">5 años</option>
+            </select><br>
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+    </div>
+</div>
 
 <script>
-    function mostrarFormulario() {
-        window.open('formularioAgregarProducto.jsp', 'Agregar Producto', 'width=400,height=400');
-    }
     document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita que se recargue la página al enviar el formulario
+        event.preventDefault();
+        var filtro = document.getElementById
         var filtro = document.getElementById('filtro').value;
         var terminoBusqueda = document.getElementById('terminoBusqueda').value;
         var url = 'buscarProducto?filtro=' + filtro + '&terminoBusqueda=' + terminoBusqueda;
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // Limpiar la tabla actual
                 var table = document.getElementById('productos');
                 table.innerHTML = '';
-                // Agregar los encabezados de columna con estilo en negrita
                 var headerRow = table.insertRow();
-                var headers = ['Nombre', 'Precio', 'Marca', 'Garantia', 'Stock'];
+                var headers = ['Nombre', 'Precio', 'Marca', 'Garantía', 'Stock'];
                 headers.forEach(headerText => {
                     var headerCell = document.createElement('th');
                     headerCell.textContent = headerText;
-                    headerCell.style.fontWeight = 'bold'; // Aplica negrita
                     headerRow.appendChild(headerCell);
                 });
-                // Agregar los nuevos productos a la tabla
                 data.forEach(producto => {
                     var row = table.insertRow();
                     row.insertCell(0).textContent = producto.nombreProducto;
@@ -104,7 +155,26 @@
                 });
             });
     });
+
+    var modal = document.getElementById('modalAgregarProducto');
+    var btn = document.getElementById('agregarProductoBtn');
+    var span = document.getElementsByClassName('close')[0];
+
+    btn.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
 </script>
 
 </body>
 </html>
+

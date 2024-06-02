@@ -20,7 +20,6 @@
     <mapping class="entity.Descuento"/>
     <mapping class="entity.Venta"/>
     <mapping class="entity.ProductoVenta"/>
-    <mapping class="entity.Usuario"/>
     <mapping class="entity.Producto"/>
     <mapping class="entity.Factura"/>
     <mapping class="entity.Cliente"/>

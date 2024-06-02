@@ -36,7 +36,7 @@
         if (agregarOtro != null && agregarOtro) {
 %>
 <p>¿Desea agregar otro descuento?</p>
-<form action="agregarDescuento" method="get">
+<form action="agregarDescuento" method="post">
     <button type="submit">Sí</button>
 </form>
 <form action="" method="get">
