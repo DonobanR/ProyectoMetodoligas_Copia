@@ -34,6 +34,7 @@ public class DescuentoDAO {
         Transaction transaction = null;
 
         try {
+
             transaction = session.beginTransaction();
             session.update(descuento);
             transaction.commit();
