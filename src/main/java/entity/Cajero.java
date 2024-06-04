@@ -3,31 +3,16 @@ package entity;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("Cajero")
+@Table(name = "cajero")
 public class Cajero extends Usuario{
-    @Id
-    @Column(name = "numeroCedula", nullable = false, length = 20)
-    private Integer numeroCedula;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario usuarioNumeroCedula;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "numeroCedula", nullable = false)
-    private Usuario usuarios;
-
-    public Integer getNumeroCedula() {
-        return numeroCedula;
+    public Usuario getUsuarioNumeroCedula() {
+        return usuarioNumeroCedula;
     }
 
-    public void setNumeroCedula(String numeroCedula) {
-        this.numeroCedula = Integer.valueOf(numeroCedula);
+    public void setUsuarioNumeroCedula(Usuario usuarioNumeroCedula) {
+        this.usuarioNumeroCedula = usuarioNumeroCedula;
     }
-
-    public Usuario getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Usuario usuarios) {
-        this.usuarios = usuarios;
-    }
-
 }

@@ -3,98 +3,66 @@ package entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Table(name = "ventas")
 public class Venta {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "idVenta", nullable = false)
+    private Integer id;
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private List<ProductoVenta> productos;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "numeroCedula", nullable = false)
+    private Cajero numeroCedula;
 
-    private double total;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idDescuento")
+    private Descuento idDescuento;
 
-    public Venta() {
-        this.productos = new ArrayList<>();
-        this.total = 0;
+    @Column(name = "numeroProductos", nullable = false)
+    private Integer numeroProductos;
+
+    @Column(name = "totalVenta", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalVenta;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void agregarProducto(Producto producto, int cantidad) {
-        ProductoVenta pv = new ProductoVenta(producto, cantidad, this);
-        productos.add(pv);
-        calcularTotal();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public BigDecimal calcularTotal() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (ProductoVenta pv : productos) {
-            BigDecimal precioProducto = pv.getProducto().getPrecio();
-            BigDecimal cantidad = BigDecimal.valueOf(pv.getCantidad());
-            total = total.add(precioProducto.multiply(cantidad));
-        }
-        return total;
+    public Cajero getNumeroCedula() {
+        return numeroCedula;
     }
 
-    public boolean setEstadoPago(String metodoPago, double monto) {
-        // Implementación simple del pago
-        return true;
+    public void setNumeroCedula(Cajero numeroCedula) {
+        this.numeroCedula = numeroCedula;
     }
 
-    public double getTotal() {
-        return total;
+    public Descuento getIdDescuento() {
+        return idDescuento;
     }
 
-    public List<ProductoVenta> getProductos() {
-        return productos;
+    public void setIdDescuento(Descuento idDescuento) {
+        this.idDescuento = idDescuento;
     }
 
-    //incremento del test
-    public double calcularImpuesto(double subTotal, double impuesto) {
-
-        return subTotal * impuesto;
+    public Integer getNumeroProductos() {
+        return numeroProductos;
     }
 
-    //incremento del test
-    public int calcularTotalItems(int numItems, int totalItems) {
-        return numItems * totalItems;
+    public void setNumeroProductos(Integer numeroProductos) {
+        this.numeroProductos = numeroProductos;
     }
 
-
-}
-
-@Entity
-class ProductoVenta {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "venta_id")
-    private Venta venta;
-
-    @ManyToOne
-    private Producto producto;
-
-    private int cantidad;
-
-    public ProductoVenta() {
+    public BigDecimal getTotalVenta() {
+        return totalVenta;
     }
 
-    public ProductoVenta(Producto producto, int cantidad, Venta venta) {
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.venta = venta;
+    public void setTotalVenta(BigDecimal totalVenta) {
+        this.totalVenta = totalVenta;
     }
 
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
 }

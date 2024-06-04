@@ -6,7 +6,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Inventario</title>
+    <title>Gesti&oacute;n de Inventario</title>
     <style>
         table {
             width: 100%;
@@ -55,13 +55,14 @@
     </style>
 </head>
 <body>
-<h1>Gestión de Inventario</h1>
+
+<h1>Gesti&oacute;n de Inventario</h1>
 
 <h2>Buscar Producto</h2>
 <form id="searchForm">
     <label for="filtro">Filtrar por:</label>
     <select id="filtro" name="filtro">
-        <option value="nombreProducto">Nombre</option>
+        <option value="nombre">Nombre</option>
         <option value="precio">Precio</option>
         <option value="marca">Marca</option>
         <option value="garantia">Garantía</option>
@@ -75,6 +76,7 @@
 <h2>Inventario Actual</h2>
 <table id="productos">
     <tr>
+        <th>ID</th>
         <th>Nombre</th>
         <th>Precio</th>
         <th>Marca</th>
@@ -88,6 +90,7 @@
         for (Producto producto : productos) {
     %>
     <tr>
+        <td><%= producto.getId()%></td>
         <td><%= producto.getNombreProducto() %></td>
         <td><%= producto.getPrecio() %></td>
         <td><%= producto.getMarca() %></td>
@@ -96,6 +99,8 @@
     </tr>
     <% } %>
 </table>
+
+<br>
 
 <button id="agregarProductoBtn">Agregar Producto</button>
 
@@ -122,14 +127,18 @@
             <label for="stock">Stock:</label>
             <input type="number" id="stock" name="stock" required><br>
             <button type="submit">Agregar</button>
+            <button type="button" onclick="window.close()">Cancelar</button>
         </form>
     </div>
 </div>
 
+<button id="actualizarProductoBtn">Actualizar Producto</button>
+
+<button id="eliminarProductoBtn">Eliminar Producto</button>
+
 <script>
     document.getElementById('searchForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        var filtro = document.getElementById
         var filtro = document.getElementById('filtro').value;
         var terminoBusqueda = document.getElementById('terminoBusqueda').value;
         var url = 'buscarProducto?filtro=' + filtro + '&terminoBusqueda=' + terminoBusqueda;
@@ -139,7 +148,7 @@
                 var table = document.getElementById('productos');
                 table.innerHTML = '';
                 var headerRow = table.insertRow();
-                var headers = ['Nombre', 'Precio', 'Marca', 'Garantía', 'Stock'];
+                var headers = ['ID', 'Nombre', 'Precio', 'Marca', 'Garantía', 'Stock'];
                 headers.forEach(headerText => {
                     var headerCell = document.createElement('th');
                     headerCell.textContent = headerText;
@@ -147,11 +156,12 @@
                 });
                 data.forEach(producto => {
                     var row = table.insertRow();
-                    row.insertCell(0).textContent = producto.nombreProducto;
-                    row.insertCell(1).textContent = producto.precio;
-                    row.insertCell(2).textContent = producto.marca;
-                    row.insertCell(3).textContent = producto.garantia;
-                    row.insertCell(4).textContent = producto.stock;
+                    row.insertCell(0).textContent = producto.id;
+                    row.insertCell(1).textContent = producto.nombre;
+                    row.insertCell(2).textContent = producto.precio;
+                    row.insertCell(3).textContent = producto.marca;
+                    row.insertCell(4).textContent = producto.garantia;
+                    row.insertCell(5).textContent = producto.stock;
                 });
             });
     });
@@ -171,6 +181,31 @@
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = 'none';
+        }
+    }
+</script>
+
+<script>
+    var modalAgregar = document.getElementById('modalAgregarProducto');
+    var btnAgregar = document.getElementById('agregarProductoBtn');
+    var btnActualizar = document.getElementById('actualizarProductoBtn');
+    var btnEliminar = document.getElementById('eliminarProductoBtn');
+
+    btnAgregar.onclick = function() {
+        modalAgregar.style.display = 'block';
+    }
+
+    btnActualizar.onclick = function() {
+        var id = prompt("Ingrese el ID del producto que desea actualizar:");
+        if (id) {
+            window.location.href = 'formularioActualizarProducto.jsp?id=' + id;
+        }
+    }
+
+    btnEliminar.onclick = function() {
+        var id = prompt("Ingrese el ID del producto que desea eliminar:");
+        if (id) {
+            window.location.href = 'formularioEliminarProducto.jsp?id=' + id;
         }
     }
 </script>

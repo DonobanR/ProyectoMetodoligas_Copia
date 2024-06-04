@@ -83,4 +83,12 @@ public class ProductoDAO {
             return query.list();
         }
     }
+
+    // Método para obtener un producto por su ID
+    public Producto obtenerProductoPorId(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Producto.class, id);
+        }
+    }
+
 }

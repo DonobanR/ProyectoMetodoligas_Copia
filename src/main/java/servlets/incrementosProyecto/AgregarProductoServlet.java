@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @WebServlet("/agregarProducto")
 public class AgregarProductoServlet extends HttpServlet {
     private ProductoDAO productoDAO = new ProductoDAO();
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nombre = request.getParameter("nombre");
@@ -22,7 +21,6 @@ public class AgregarProductoServlet extends HttpServlet {
         String marca = request.getParameter("marca");
         String garantia = request.getParameter("garantia");
         int stock = Integer.parseInt(request.getParameter("stock"));
-
         // Crear un objeto Producto
         Producto producto = new Producto();
         producto.setNombreProducto(nombre);
@@ -30,10 +28,8 @@ public class AgregarProductoServlet extends HttpServlet {
         producto.setMarca(marca);
         producto.setGarantia(garantia);
         producto.setStock(stock);
-
         // Guardar el producto en la base de datos
         productoDAO.guardarProducto(producto);
-
         // Redirigir a la página de gestión de inventario
         response.sendRedirect("gestionInventario.jsp");
     }

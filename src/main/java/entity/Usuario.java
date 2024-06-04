@@ -3,12 +3,12 @@ package entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
 public class Usuario {
     @Id
-    @Column(name = "numeroCedula", nullable = false, length = 20)
+    @Column(name = "numero_cedula", nullable = false)
     private Integer numeroCedula;
 
     @Column(name = "nombre", nullable = false)
@@ -23,19 +23,12 @@ public class Usuario {
     @Column(name = "correo")
     private String correo;
 
-    private String usuarioIn = "usuario1";
-    private String contrasenaIn = "contrasena1";
+    @Column(name = "usuario", nullable = false)
+    private String usuario;
 
+    @Column(name = "contrasena", nullable = false)
+    private String contrasena;
 
-    //Incremento del test
-    public boolean iniciarSesion(String usuario, String contrasena) {
-        return this.usuarioIn.equals(usuario) &&
-                this.contrasenaIn.equals(contrasena);
-    }
-
-    public boolean verificarCedula() {
-        return true;
-    }
     public Integer getNumeroCedula() {
         return numeroCedula;
     }
@@ -76,5 +69,20 @@ public class Usuario {
         this.correo = correo;
     }
 
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
 
 }

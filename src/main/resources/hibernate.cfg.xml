@@ -6,9 +6,9 @@
   <session-factory>
     <!--  Database connection settings  -->
     <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sistemaventasfacturas</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/bd_SistemaVentasFactura</property>
     <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password">1234</property>
+    <property name="hibernate.connection.password">root</property>
     <!--  SQL dialect  -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.show_sql">true</property>
@@ -18,12 +18,11 @@
     <property name="hibernate.current_session_context_class">thread</property>
     <!--  Entity Clases  -->
     <mapping class="entity.Descuento"/>
-    <mapping class="entity.Venta"/>
-    <mapping class="entity.ProductoVenta"/>
     <mapping class="entity.Producto"/>
-    <mapping class="entity.Factura"/>
-    <mapping class="entity.Cliente"/>
-    <mapping class="entity.Cajero"/>
-    <mapping class="entity.Administradoresinventario"/>
+    <mapping class="entity.Usuario" />
+    <mapping class="entity.Administradoresinventario" />
+    <mapping class="entity.Cajero" />
+    <mapping class="entity.Factura" />
+    <mapping class="entity.Venta" />
   </session-factory>
 </hibernate-configuration>

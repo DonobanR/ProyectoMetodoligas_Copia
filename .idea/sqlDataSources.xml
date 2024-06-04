@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="146f8518-7b8b-40b4-b2a7-6ef3dbee7ae0" name="bd_SistemaVentasFactura@localhost Mapping">
+      <data-sources db="d4dbbcec-abbc-4611-b698-69e76a8d11f6" />
+      <scope>
+        <node kind="database" qname="@" />
+      </scope>
+    </mapping>
+  </component>
+</project>

@@ -1,6 +1,6 @@
 package dao;
 
-import entity.Descuento;
+import entity.Usuario;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -8,15 +8,15 @@ import util.HibernateUtil;
 
 import java.util.List;
 
-public class DescuentoDAO {
-    // Método para guardar un descuento en la base de datos
-    public void guardarDescuento(Descuento descuento) {
+public class UsuarioDAO {
+
+    public void save(Usuario usuario) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         try {
             transaction = session.beginTransaction();
-            session.save(descuento);
+            session.save(usuario);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -28,69 +28,69 @@ public class DescuentoDAO {
         }
     }
 
-    // Método para actualizar un descuento en la base de datos
-    public void actualizarDescuento(Descuento descuento) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            session.update(descuento);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
-
-    // Método para eliminar un descuento de la base de datos
-    public void eliminarDescuento(Descuento descuento) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            session.delete(descuento);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
-
-    // Método para obtener todos los descuentos de la base de datos
-    public List<Descuento> obtenerDescuentos() {
+    public Usuario findById(Integer numeroCedula) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Descuento> query = session.createQuery("FROM Descuento", Descuento.class);
+            return session.get(Usuario.class, numeroCedula);
+        }
+    }
+
+    public Usuario findByUsername(String usuario) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Usuario> query = session.createQuery("FROM Usuario WHERE usuario = :usuario", Usuario.class);
+            query.setParameter("usuario", usuario);
+            return query.uniqueResult();
+        }
+    }
+
+    public List<Usuario> findAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Usuario> query = session.createQuery("FROM Usuario", Usuario.class);
             return query.list();
         }
     }
 
-    // Método para buscar descuentos en la base de datos
-    public List<Descuento> buscarDescuento(String filtro, String terminoBusqueda) {
+    public void update(Usuario usuario) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            session.update(usuario);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void delete(Usuario usuario) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            session.delete(usuario);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public List<Usuario> search(String filtro, String terminoBusqueda) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "FROM Descuento WHERE " + filtro + " LIKE :termino";
-            Query<Descuento> query = session.createQuery(hql, Descuento.class);
+            String hql = "FROM Usuario WHERE " + filtro + " LIKE :termino";
+            Query<Usuario> query = session.createQuery(hql, Usuario.class);
             query.setParameter("termino", "%" + terminoBusqueda + "%");
             return query.list();
-        }
-    }
-
-    // Método para obtener un descuento por ID
-    public Descuento obtenerDescuentoPorId(Integer id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            return session.get(Descuento.class, id);
-        } finally {
-            session.close();
         }
     }
 }

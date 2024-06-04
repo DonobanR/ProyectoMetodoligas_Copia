@@ -1,8 +1,8 @@
-package servlets;
+package servlets.incrementosProyecto;
 
 import com.google.gson.Gson;
-import dao.DescuentoDAO;
-import entity.Descuento;
+import dao.ProductoDAO;
+import entity.Producto;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,27 +11,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"/obtenerDescuentos", "/buscarDescuento"})
-public class DescuentoService extends HttpServlet {
-
-    private final DescuentoDAO descuentoDAO = new DescuentoDAO();
-
-    @Override
+@WebServlet({"/obtenerProductos", "/buscarProducto"})
+public class InventarioService extends HttpServlet {
+    private final ProductoDAO productoDAO = new ProductoDAO();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String filtro = request.getParameter("filtro");
         String terminoBusqueda = request.getParameter("terminoBusqueda");
-
-        List<Descuento> descuentos;
-
+        List<Producto> productos;
         if (filtro != null && terminoBusqueda != null && !filtro.isEmpty() && !terminoBusqueda.isEmpty()) {
-            descuentos = descuentoDAO.buscarDescuento(filtro, terminoBusqueda);
+            productos = productoDAO.buscarProducto(filtro, terminoBusqueda);
         } else {
-            descuentos = descuentoDAO.obtenerDescuentos();
+            productos = productoDAO.obtenerProductos();
         }
-
-        // Convertir la lista de descuentos a JSON
-        String json = new Gson().toJson(descuentos);
-
+        // Convertir la lista de productos a JSON
+        String json = new Gson().toJson(productos);
         // Enviar la respuesta como JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

@@ -1,4 +1,4 @@
-package servlets;
+package servlets.incrementosProyecto;
 
 import dao.ProductoDAO;
 import entity.Producto;
@@ -12,18 +12,21 @@ import java.io.IOException;
 
 @WebServlet("/eliminarProducto")
 public class EliminarProductoServlet extends HttpServlet {
+    private ProductoDAO productoDAO = new ProductoDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener el ID del producto a eliminar
         int id = Integer.parseInt(request.getParameter("id"));
 
-        // Crear un objeto Producto con el ID
-        Producto producto = new Producto();
-        producto.setId(id);
+        Producto producto = productoDAO.obtenerProductoPorId(id);
+        if (producto != null) {
+            productoDAO.eliminarProducto(producto);
 
-        // Eliminar el producto de la base de datos
-        ProductoDAO productoDAO = new ProductoDAO();
-        productoDAO.eliminarProducto(producto);
+            // Redirigir con mensaje de éxito
+            response.sendRedirect("formularioEliminarProducto.jsp?id=" + id + "&mensaje=eliminacionExitosa");
+        } else {
+            // Redirigir con mensaje de error
+            response.sendRedirect("formularioEliminarProducto.jsp?id=" + id + "&mensaje=errorEliminacion");
+        }
     }
 }
