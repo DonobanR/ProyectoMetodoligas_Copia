@@ -1,6 +1,7 @@
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\ActualizarDescuentoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Administradoresinventario.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\BuscarDescuentoPorIdServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ExecuteProductoDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\AgregarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\InventarioService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ProductoDAO.java
@@ -22,10 +23,11 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incremento
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\EliminarDescuentoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\UsuarioDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\Pago.java
-C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\Execute\AgregarDescuentoExecute.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\execute\AgregarDescuentoExecute.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\EliminarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\VerificarPagoRequest.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\ActualizarProductoServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ExecuteDescuentoDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\SaldoInsuficienteException.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\hash\PasswordHasher.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\LoginServlet.java

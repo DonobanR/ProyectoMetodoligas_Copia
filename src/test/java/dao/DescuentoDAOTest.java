@@ -26,8 +26,8 @@ public class DescuentoDAOTest {
     @Test
     public void testGuardarDescuento() {
         Descuento descuento = new Descuento();
-        descuento.setCodigo("DESC001");
-        descuento.setNombre("BigDescuento");
+        descuento.setCodigo("78457845");
+        descuento.setNombre("BigDescuentoECU");
         descuento.setPorcentajeDescuento(BigDecimal.TEN);
         descuento.setStock(100);
 
@@ -38,30 +38,30 @@ public class DescuentoDAOTest {
     @Test
     public void testActualizarDescuento() {
         Descuento descuento = new Descuento();
-        descuento.setCodigo("454545");
-        descuento.setNombre("BigDescuento2025");
+        descuento.setCodigo("121212");
+        descuento.setNombre("DescuentoBig2025");
         descuento.setPorcentajeDescuento(BigDecimal.TEN);
-        descuento.setStock(50);
+        descuento.setStock(100);
 
         descuentoDAO.guardarDescuento(descuento);
 
-        descuento.setNombre("Big2026");
-        descuento.setPorcentajeDescuento(BigDecimal.valueOf(15));
+        descuento.setNombre("DescuentoBig2025");
+        descuento.setPorcentajeDescuento(BigDecimal.valueOf(40));
 
         descuentoDAO.actualizarDescuento(descuento);
 
         Descuento descuentoActualizado = descuentoDAO.obtenerDescuentoPorId(descuento.getId());
 
-        assertEquals("Big2026", descuentoActualizado.getNombre());
-        assertEquals(BigDecimal.valueOf(15.00).setScale(2), descuentoActualizado.getPorcentajeDescuento().setScale(2));
+        assertEquals("DescuentoBig2025", descuentoActualizado.getNombre());
+        assertEquals(BigDecimal.valueOf(40.00).setScale(2), descuentoActualizado.getPorcentajeDescuento().setScale(2));
 
     }
 
     @Test
     public void testEliminarDescuento() {
         Descuento descuento = new Descuento();
-        descuento.setCodigo("444444");
-        descuento.setNombre("Descuento2025");
+        descuento.setCodigo("4565452");
+        descuento.setNombre("Descuento2020");
         descuento.setPorcentajeDescuento(BigDecimal.TEN);
         descuento.setStock(50);
         descuentoDAO.guardarDescuento(descuento);

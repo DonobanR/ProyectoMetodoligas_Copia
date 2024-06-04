@@ -3,8 +3,8 @@ incrementos\VerificarPagoResponse.class
 servlets\incrementosProyecto\ActualizarDescuentoServlet.class
 incrementos\VerificarPagoGateway.class
 entity\Factura.class
-Execute\AgregarDescuentoExecute.class
 util\ConexionBD.class
+dao\ExecuteDescuentoDAO.class
 servlets\incrementosProyecto\InventarioService.class
 incrementos\Pago.class
 entity\Usuario.class
@@ -21,6 +21,7 @@ servlets\incrementosProyecto\ActualizarProductoServlet.class
 servlets\BuscarProductoPorIdServlet.class
 servlets\incrementosProyecto\AgregarDescuentoServlet.class
 servlets\RegistroServlet.class
+execute\AgregarDescuentoExecute.class
 incrementos\SaldoInsuficienteException.class
 servlets\incrementosProyecto\AgregarProductoServlet.class
 util\HibernateUtil.class
@@ -29,4 +30,5 @@ incrementos\VerificarPagoRequest.class
 dao\ProductoDAO.class
 entity\Venta.class
 hash\PasswordHasher.class
+dao\ExecuteProductoDAO.class
 incrementos\VerificarPagoResponse$TargetStatus.class

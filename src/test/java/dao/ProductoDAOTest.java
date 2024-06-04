@@ -23,29 +23,28 @@ public class ProductoDAOTest {
 
     @Test
     public void testGuardarProducto() {
-        Producto producto = new Producto(null, "iPhone 13 Pro", 1300.00, "Apple", "1 año", 10);
+        Producto producto = new Producto(null, "iPhone 15 Pro", 1300.00, "Apple", "1 año", 30);
         productoDAO.guardarProducto(producto);
         assertNotNull(producto.getId()); // Verificar que se haya asignado un ID
     }
 
     @Test
     public void testActualizarProducto() {
-        Producto producto = new Producto(null, "Samsung S10+", 750.00, "Samsung", "1 año", 20);
+        Producto producto = new Producto(null, "Huawei Pura 70", 750.00, "Huawei", "1 año", 20);
         productoDAO.guardarProducto(producto);
 
-        producto.setNombreProducto("Samsung S10 + Plus");
-        producto.setPrecio(new BigDecimal(650.00));
+        producto.setNombreProducto("HUAWEI Pura 70 Ultra");
+        producto.setPrecio(new BigDecimal(850.00));
         productoDAO.actualizarProducto(producto);
 
         Producto productoActualizado = productoDAO.obtenerProductoPorId(producto.getId());
-        assertEquals("Samsung S10 + Plus", productoActualizado.getNombreProducto());
-        //assertEquals(new BigDecimal(650.00), productoActualizado.getPrecio());
-        assertEquals(BigDecimal.valueOf(650.00).setScale(2), productoActualizado.getPrecio().setScale(2));
+        assertEquals("HUAWEI Pura 70 Ultra", productoActualizado.getNombreProducto());
+        assertEquals(BigDecimal.valueOf(850.00).setScale(2), productoActualizado.getPrecio().setScale(2));
     }
 
     @Test
     public void testEliminarProducto() {
-        Producto producto = new Producto(null, "Laptop ASUS", 1200.00, "ASUS", "1 año", 10);
+        Producto producto = new Producto(null, "Laptop ALIENWARE", 1500.00, "DELL", "1 año", 10);
         productoDAO.guardarProducto(producto);
 
         productoDAO.eliminarProducto(producto);
