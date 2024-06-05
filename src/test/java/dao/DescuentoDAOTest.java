@@ -26,8 +26,8 @@ public class DescuentoDAOTest {
     @Test
     public void testGuardarDescuento() {
         Descuento descuento = new Descuento();
-        descuento.setCodigo("78457845");
-        descuento.setNombre("BigDescuentoECU");
+        descuento.setCodigo("12457845");
+        descuento.setNombre("BigDescuentoPEU");
         descuento.setPorcentajeDescuento(BigDecimal.TEN);
         descuento.setStock(100);
 

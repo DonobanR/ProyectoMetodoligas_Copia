@@ -8,7 +8,7 @@
   <artifactId>MetodologiasProyecto_Proyecto</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Ventas</name>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -107,8 +107,6 @@
   </dependencies>
 
   <build>
-      <finalName>Ventas</finalName>
-      <defaultGoal>package</defaultGoal>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
