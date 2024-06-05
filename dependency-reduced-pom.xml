@@ -3,10 +3,24 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.codejava</groupId>
   <artifactId>MetodologiasProyecto_Proyecto</artifactId>
-  <name>COPIA</name>
+  <packaging>war</packaging>
+  <name>Ventas</name>
   <version>1.0-SNAPSHOT</version>
   <build>
+    <defaultGoal>package</defaultGoal>
+    <finalName>Ventas</finalName>
     <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
