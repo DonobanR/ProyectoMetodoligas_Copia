@@ -10,7 +10,7 @@ public class ExecuteDescuentoDAO {
 
         //Agregar Descuento
         Descuento nuevoDescuento = new Descuento();
-        nuevoDescuento.setCodigo("231231");
+        nuevoDescuento.setCodigo("||||eee ");
         nuevoDescuento.setNombre("DescuentoBALL");
         nuevoDescuento.setPorcentajeDescuento(BigDecimal.valueOf(40));
         nuevoDescuento.setStock(15);

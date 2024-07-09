@@ -2,6 +2,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\i
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Administradoresinventario.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\BuscarDescuentoPorIdServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ExecuteProductoDAO.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\EliminarClienteServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\AgregarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\InventarioService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ProductoDAO.java
@@ -11,10 +12,13 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Pro
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\RegistroServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\util\ConexionBD.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Descuento.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\ActualizarClienteServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\DescuentoService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\BuscarProductoPorIdServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Usuario.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\ClienteService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\AgregarDescuentoServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ClienteDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Venta.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\VerificarPagoResponse.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Factura.java
@@ -27,7 +31,9 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\execute\Ag
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\EliminarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\VerificarPagoRequest.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\ActualizarProductoServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\incrementosProyecto\AgregarClienteServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ExecuteDescuentoDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\SaldoInsuficienteException.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\hash\PasswordHasher.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\LoginServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Cliente.java

@@ -154,6 +154,39 @@
                     <p class="mt-4 text-sm text-gray-500"></p>
                 </div>
             </div>
+
+            <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
+                <div class="p-8 xl:px-12">
+                    <h3 class="text-base font-semibold text-purple-600">Clientes</h3>
+                    <p class="mt-3 text-base text-gray-600">Gesti&oacute;n de Clientes</p>
+
+                    <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Agregar Cleintes</span>
+                        </li>
+
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Actualizar Clientes </span>
+                        </li>
+
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Eliminar Clientes </span>
+                        </li>
+                    </ul>
+
+                    <a href="gestionCliente.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Clientes </a>
+                    <p class="mt-4 text-sm text-gray-500"></p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
