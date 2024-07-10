@@ -18,7 +18,7 @@
 
 <%
     String mensaje = request.getParameter("mensaje");
-    String numeroCedulaStr = request.getParameter("numero_cedula");
+    String numeroCedulaStr = request.getParameter("id");
     int numeroCedula = Integer.parseInt(numeroCedulaStr);
     ClienteDAO clienteDAO = new ClienteDAO();
     Cliente cliente = clienteDAO.obtenerClientePorCedula(numeroCedula);
@@ -42,7 +42,6 @@
     <button type="submit">Eliminar Cliente</button>
 </form>
 <% } else { %>
-<p>Descuento no encontrado.</p>
 <button type="button" onclick="window.location.href='gestionCliente.jsp'">Volver</button>
 <% } %>
 

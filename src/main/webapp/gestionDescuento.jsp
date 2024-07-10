@@ -133,7 +133,7 @@
 
 <button id="eliminarDescuentoBtn">Eliminar Descuento</button>
 
-<button >Regresar</button>
+<button type="button" onclick="window.location.href='inicio.jsp'">Volver</button>
 
 <script>
     document.getElementById('searchForm').addEventListener('submit', function(event) {

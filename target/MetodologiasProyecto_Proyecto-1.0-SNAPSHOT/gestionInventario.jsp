@@ -136,6 +136,8 @@
 
 <button id="eliminarProductoBtn">Eliminar Producto</button>
 
+<button type="button" onclick="window.location.href='inicio.jsp'">Volver</button>
+
 <script>
     document.getElementById('searchForm').addEventListener('submit', function(event) {
         event.preventDefault();

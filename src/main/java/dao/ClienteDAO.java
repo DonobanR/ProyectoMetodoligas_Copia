@@ -93,4 +93,18 @@ public class ClienteDAO {
             session.close();
         }
     }
+
+    // Método para verificar si un correo ya existe en la base de datos
+    public boolean existeCorreo(String correo) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "SELECT COUNT(*) FROM Cliente WHERE correo = :correo";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            query.setParameter("correo", correo);
+            Long count = query.uniqueResult();
+            return count > 0;
+        } finally {
+            session.close();
+        }
+    }
 }
