@@ -24,7 +24,7 @@ public class AgregarClienteServlet extends HttpServlet {
 
         // Crear un objeto Cliente con los datos recibidos
         Cliente cliente = new Cliente();
-        cliente.setNumeroCedula(numeroCedula);
+        cliente.setId(numeroCedula);
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
         cliente.setDireccion(direccion);

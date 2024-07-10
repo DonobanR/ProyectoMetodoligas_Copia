@@ -19,7 +19,7 @@ public class RegistroServlet extends HttpServlet {
         // Recoger parámetros del formulario
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
-        int numeroCedula = Integer.parseInt(request.getParameter("numeroCedula"));
+        String numeroCedula = request.getParameter("numeroCedula");
         String direccion = request.getParameter("direccion");
         String correo = request.getParameter("correo");
         String usuario = request.getParameter("usuario");

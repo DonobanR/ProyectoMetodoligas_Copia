@@ -35,10 +35,10 @@ public class ActualizarClienteServlet extends HttpServlet {
             clienteDAO.actualizarCliente(cliente);
 
             // Redirigir a la página de gestión de clientes con un mensaje de éxito
-            response.sendRedirect("gestionClientes.jsp?id=" + numeroCedula +"&mensaje=actualizacionExitosa");
+            response.sendRedirect("gestionCliente.jsp?id=" + numeroCedula +"&mensaje=actualizacionExitosa");
         } else {
             // Redirigir con mensaje de error
-            response.sendRedirect("gestionClientes.jsp?mensaje=errorActualizacion");
+            response.sendRedirect("gestionCliente.jsp?mensaje=errorActualizacion");
         }
     }
 }

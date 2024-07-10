@@ -108,7 +108,7 @@
 
 <br>
 
-<button id="agregarClienteBtn">Agregar Cliente 222</button>
+<button id="agregarClienteBtn">Agregar Cliente</button>
 
 <div id="modalAgregarCliente" class="modal">
     <div class="modal-content">
@@ -124,15 +124,46 @@
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion">
             <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo">
-            <button type="submit">Agregar Cliente 333</button>
+            <input type="email" id="correo" name="correo" readonly>
+            <button type="submit">Agregar Cliente</button>
         </form>
     </div>
 </div>
 
-<button id="actualizarClienteBtn">Actualizar Descuento</button>
+<button id="actualizarClienteBtn">Actualizar Cliente</button>
 
-<button id="eliminarClienteBtn">Eliminar Descuento</button>
+<button id="eliminarClienteBtn">Eliminar Cliente</button>
+
+<button type="button" onclick="window.location.href='inicio.jsp'">Volver</button>
+
+<script>
+    document.getElementById('nombre').addEventListener('blur', generarCorreo);
+    document.getElementById('apellido').addEventListener('blur', generarCorreo);
+
+    function generarCorreo() {
+        var nombre = document.getElementById('nombre').value.toLowerCase();
+        var apellido = document.getElementById('apellido').value.toLowerCase();
+        if (nombre && apellido) {
+            var correo = nombre + '.' + apellido + '@severeg.com';
+            verificarCorreo(correo).then(resultado => {
+                if (resultado.existe) {
+                    var contador = 1;
+                    while (resultado.existe) {
+                        correo = nombre + '.' + apellido + (contador < 10 ? '0' + contador : contador) + '@severeg.com';
+                        contador++;
+                        resultado = verificarCorreo(correo);
+                    }
+                }
+                document.getElementById('correo').value = correo;
+            });
+        }
+    }
+
+    function verificarCorreo(correo) {
+        return fetch('verificarCorreo?correo=' + correo)
+            .then(response => response.json());
+    }
+</script>
 
 <script>
     document.getElementById('searchForm').addEventListener('submit', function (event){
@@ -153,12 +184,12 @@
                     headerRow.appendChild(headerCell);
                 });
                 data.forEach(cliente => {
-                   var row = table.insertRow();
-                   row.insertCell(0).textContent = cliente.numero_cedula;
-                   row.insertCell(1).textContent = cliente.nombre;
-                   row.insertCell(2).textContent = cliente.apellido;
-                   row.insertCell(3).textContent = cliente.direccion;
-                   row.insertCell(4).textContent = cliente.correo;
+                    var row = table.insertRow();
+                    row.insertCell(0).textContent = cliente.numero_cedula;
+                    row.insertCell(1).textContent = cliente.nombre;
+                    row.insertCell(2).textContent = cliente.apellido;
+                    row.insertCell(3).textContent = cliente.direccion;
+                    row.insertCell(4).textContent = cliente.correo;
 
                 });
             });
@@ -195,14 +226,14 @@
     }
 
     btnActualizar.onclick = function() {
-        var id = prompt("Ingrese el ID del cliente que desea actualizar:");
+        var id = prompt("Ingrese el Numero de Cedula del cliente que desea actualizar:");
         if (id) {
             window.location.href = 'formularioActualizarCliente.jsp?id=' + id;
         }
     }
 
     btnEliminar.onclick = function() {
-        var id = prompt("Ingrese el ID del cliente que desea eliminar:");
+        var id = prompt("Ingrese el Numero de Cedula del cliente que desea eliminar:");
         if (id) {
             window.location.href = 'formularioEliminarCliente.jsp?id=' + id;
         }

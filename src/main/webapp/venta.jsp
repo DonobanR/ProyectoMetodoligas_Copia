@@ -19,8 +19,8 @@
                     select.innerHTML = '';
                     data.forEach(cliente => {
                         var option = document.createElement('option');
-                        option.value = cliente.numeroCedula;
-                        option.textContent = cliente.numeroCedula;
+                        option.value = cliente.id;
+                        option.textContent = cliente.id;
                         select.appendChild(option);
                     });
                 })
@@ -44,7 +44,7 @@
         }
 
         function agregarProducto() {
-            var idProducto = document.getElementById('idProducto').value;
+            var idProducto = document.getElementById('idProducto').options[document.getElementById('idProducto').selectedIndex].value;
             var cantidad = document.getElementById('cantidad').value;
             var table = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
 
@@ -70,6 +70,9 @@
                 })
                 .catch(error => console.error('Error al obtener el producto:', error));
         }
+
+
+
 
 
 
@@ -99,12 +102,13 @@
 <div>
     <label for="idProducto">Seleccionar Producto:</label>
     <select id="idProducto">
-        <!-- Aquí se llenarán dinámicamente los productos -->
+        <!-- Las opciones de los productos se llenarán dinámicamente desde JavaScript -->
     </select>
     <label for="cantidad">Cantidad:</label>
     <input type="number" id="cantidad" min="1">
     <button onclick="agregarProducto()">Agregar Producto</button>
 </div>
+
 <table id="tablaProductos" border="1">
     <thead>
     <tr>

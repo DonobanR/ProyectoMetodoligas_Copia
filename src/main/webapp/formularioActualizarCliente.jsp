@@ -18,7 +18,7 @@
 
 <%
     String mensaje = request.getParameter("mensaje");
-    String numeroCedulaStr = request.getParameter("numero_cedula");
+    String numeroCedulaStr = request.getParameter("id");
     int numeroCedula = Integer.parseInt(numeroCedulaStr);
     ClienteDAO clienteDAO = new ClienteDAO();
     Cliente cliente = clienteDAO.obtenerClientePorCedula(numeroCedula);
@@ -32,24 +32,21 @@
 <h1>Editar Cliente</h1>
 
 <% if (cliente != null) { %>
-<form action="actualizarCliente" method="post">
+<form id="actualizarClienteForm" action="actualizarCliente" method="post">
     <input type="hidden" name="numero_cedula" value="<%= cliente.getId() %>">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" value="<%= cliente.getNombre() %>" required>
-    <br>
     <label for="apellido">Apellido:</label>
     <input type="text" id="apellido" name="apellido" value="<%= cliente.getApellido() %>" required>
-    <br>
     <label for="direccion">Dirección:</label>
     <input type="text" id="direccion" name="direccion" value="<%= cliente.getDireccion() %>">
-    <br>
     <label for="correo">Correo:</label>
     <input type="email" id="correo" name="correo" value="<%= cliente.getCorreo() %>">
-    <br>
     <button type="submit">Actualizar Cliente</button>
+    <button type="button" onclick="window.location.href='gestionCliente.jsp'">Cancelar</button>
 </form>
 <% } else { %>
-<p>Cliente no encontrado.</p>
+<p>Descuento no encontrado.</p>
 <button type="button" onclick="window.location.href='gestionCliente.jsp'">Volver</button>
 <% } %>
 

@@ -25,10 +25,10 @@ public class EliminarClienteServlet extends HttpServlet {
             clienteDAO.eliminarCliente(cliente);
 
             // Redirigir a la página de gestión de clientes con un mensaje de éxito
-            response.sendRedirect("formularioEliminarDescuento.jsp?id=" + numeroCedula + "&mensaje=eliminacionExitosa");
+            response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=eliminacionExitosa");
         } else {
             // Redirigir con mensaje de error
-            response.sendRedirect("formularioEliminarDescuento.jsp?id=" + numeroCedula + "&mensaje=errorEliminacion");
+            response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=errorEliminacion");
         }
 
 
