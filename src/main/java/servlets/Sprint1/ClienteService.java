@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"/obtenerClientes", "/buscarClientes"})
+@WebServlet("/buscarClientes")
 public class ClienteService extends HttpServlet {
 
     private final ClienteDAO clienteDAO = new ClienteDAO();

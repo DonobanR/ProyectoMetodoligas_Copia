@@ -9,62 +9,41 @@ import util.HibernateUtil;
 import java.util.List;
 
 public class DescuentoDAO {
+    // Método privado para ejecutar una operación transaccional
+    private void ejecutarTransaccion(OperacionTransaccional operacion) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                operacion.ejecutar(session);
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Interfaz funcional para operaciones transaccionales
+    interface OperacionTransaccional {
+        void ejecutar(Session session);
+    }
+
     // Método para guardar un descuento en la base de datos
     public void guardarDescuento(Descuento descuento) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            session.save(descuento);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        ejecutarTransaccion(session -> session.save(descuento));
     }
 
     // Método para actualizar un descuento en la base de datos
     public void actualizarDescuento(Descuento descuento) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-
-            transaction = session.beginTransaction();
-            session.update(descuento);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        ejecutarTransaccion(session -> session.update(descuento));
     }
 
     // Método para eliminar un descuento de la base de datos
     public void eliminarDescuento(Descuento descuento) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            session.delete(descuento);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        ejecutarTransaccion(session -> session.delete(descuento));
     }
 
     // Método para obtener todos los descuentos de la base de datos
@@ -85,13 +64,10 @@ public class DescuentoDAO {
         }
     }
 
-    // Método para obtener un descuento por ID
+    // Método para obtener un descuento por su ID
     public Descuento obtenerDescuentoPorId(Integer id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Descuento.class, id);
-        } finally {
-            session.close();
-        }
-    }
+}
+}
 }

@@ -1,23 +1,27 @@
 package entity;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ventas")
 public class Venta {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idVenta", nullable = false)
-    private Integer id;
+    private Integer idVenta;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "numeroCedula", nullable = false)
-    private Cajero numeroCedula;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "numeroCedula", nullable = false) // Asumo que numeroCedula es el ID del Cajero
+    private Cajero cajero;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cedulaCliente", nullable = false) // Asumo que cedulaCliente es la cédula del Cliente
+    private Cliente cliente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idDescuento")
-    private Descuento idDescuento;
+    private Descuento descuento;
 
     @Column(name = "numeroProductos", nullable = false)
     private Integer numeroProductos;
@@ -25,28 +29,36 @@ public class Venta {
     @Column(name = "totalVenta", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalVenta;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdVenta() {
+        return idVenta;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdVenta(Integer idVenta) {
+        this.idVenta = idVenta;
     }
 
-    public Cajero getNumeroCedula() {
-        return numeroCedula;
+    public Cajero getCajero() {
+        return cajero;
     }
 
-    public void setNumeroCedula(Cajero numeroCedula) {
-        this.numeroCedula = numeroCedula;
+    public void setCajero(Cajero cajero) {
+        this.cajero = cajero;
     }
 
-    public Descuento getIdDescuento() {
-        return idDescuento;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setIdDescuento(Descuento idDescuento) {
-        this.idDescuento = idDescuento;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Descuento getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Descuento descuento) {
+        this.descuento = descuento;
     }
 
     public Integer getNumeroProductos() {
@@ -64,5 +76,4 @@ public class Venta {
     public void setTotalVenta(BigDecimal totalVenta) {
         this.totalVenta = totalVenta;
     }
-
 }
