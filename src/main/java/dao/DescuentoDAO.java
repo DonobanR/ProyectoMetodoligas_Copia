@@ -1,5 +1,3 @@
-descuentoDAO:
-
 package dao;
 
 import entity.Descuento;
@@ -70,6 +68,6 @@ public class DescuentoDAO {
     public Descuento obtenerDescuentoPorId(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Descuento.class, id);
-        }
-    }
+}
+}
 }

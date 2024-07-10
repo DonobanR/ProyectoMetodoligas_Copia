@@ -1,5 +1,3 @@
-test:
-
 package dao;
 
 import entity.Descuento;
@@ -112,5 +110,5 @@ public class DescuentoDAOTest {
         Descuento descuentoObtenido = descuentoDAO.obtenerDescuentoPorId(descuento.getId());
         assertNotNull(descuentoObtenido);
         assertEquals("DescuentoPorId", descuentoObtenido.getNombre());
-    }
+}
 }

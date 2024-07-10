@@ -33,8 +33,8 @@ public class Usuario {
         return numeroCedula;
     }
 
-    public void setNumeroCedula(String numeroCedula) {
-        this.numeroCedula = Integer.valueOf(numeroCedula);
+    public void setNumeroCedula(Integer numeroCedula) {
+        this.numeroCedula = numeroCedula;
     }
 
     public String getNombre() {
@@ -84,5 +84,4 @@ public class Usuario {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-
 }
