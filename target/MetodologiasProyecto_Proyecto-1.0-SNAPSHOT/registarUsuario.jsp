@@ -138,8 +138,8 @@
                             <label for="tipoUsuario" class="text-base font-medium text-gray-900">Tipo de Usuario</label>
                             <div class="mt-2.5">
                                 <select name="tipoUsuario" id="tipoUsuario" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600">
-                                    <option value="admin">Administrador</option>
-                                    <option value="cajero">Cajero</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Cajero">Cajero</option>
                                 </select>
                             </div>
                         </div>

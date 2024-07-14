@@ -31,9 +31,9 @@ public class RegistroServlet extends HttpServlet {
 
         // Crear instancia del usuario
         Usuario nuevoUsuario;
-        if (tipoUsuario.equals("cajero")) {
+        if (tipoUsuario.equals("Cajero")) {
             nuevoUsuario = new Cajero();
-        } else if (tipoUsuario.equals("admin")) {
+        } else if (tipoUsuario.equals("Administrador")) {
             nuevoUsuario = new Administradoresinventario();
         } else {
             // Manejar error

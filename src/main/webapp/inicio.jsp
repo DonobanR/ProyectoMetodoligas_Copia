@@ -1,10 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="entity.Usuario" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
+
 <%
-    HttpSession session1 = request.getSession();
-    String tipoUsuario = (String) session1.getAttribute("tipoUsuario");
+    HttpSession session1 = request.getSession(false);
+    String tipoUsuario = null;
+    if (session1 != null) {
+        tipoUsuario = (String) session1.getAttribute("tipoUsuario");
+    }
+
+    if (tipoUsuario == null) {
+        response.sendRedirect("iniciarSesion.jsp");
+        return;
+    }
 %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,55 +32,6 @@
         </div>
 
         <div class="grid max-w-md grid-cols-1 gap-6 mx-auto mt-8 text-center lg:max-w-full lg:mt-16 lg:grid-cols-3">
-            <% if ("Administrador".equals(tipoUsuario)) { %>
-                <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md">
-                    <div class="p-8 xl:px-12">
-                        <h3 class="text-base font-semibold text-purple-600">Inventario</h3>
-                        <p class="mt-3 text-base text-gray-600">Control de tus Productos</p>
-
-                        <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Agregar Productos </span>
-                            </li>
-
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Actualizar Productos </span>
-                            </li>
-
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="h-5 text-indigo-500 flex-shrink-0w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Eliminar Productos </span>
-                            </li>
-
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="h-5 text-indigo-500 flex-shrink-0w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Ver Stock </span>
-                            </li>
-
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="pb-0.5 text-base font-medium text-gray-900 border-b border-black border-dashed"> Actualizar Stock </span>
-                            </li>
-                        </ul>
-
-                        <a href="gestionInventario.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:bg-blue-700" role="button"> Acceder a Inventario </a>
-                        <p class="mt-4 text-sm text-gray-500"></p>
-                    </div>
-                </div>
-            <% } %>
-
             <% if ("Cajero".equals(tipoUsuario)) { %>
                 <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
                     <div class="p-8 xl:px-12">
@@ -118,9 +79,8 @@
                         <p class="mt-4 text-sm text-gray-500"></p>
                     </div>
                 </div>
-            <% } %>
 
-            <% if ("Administrador".equals(tipoUsuario)) { %>
+            <% } else { %>
                 <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md">
                     <div class="p-8 xl:px-12">
                         <h3 class="text-base font-semibold text-purple-600">Descuentos</h3>
@@ -169,80 +129,120 @@
                 </div>
             <% } %>
 
-            <% if ("Cajero".equals(tipoUsuario) || "Administrador".equals(tipoUsuario)) { %>
-                <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
-                    <div class="p-8 xl:px-12">
-                        <h3 class="text-base font-semibold text-purple-600">Clientes</h3>
-                        <p class="mt-3 text-base text-gray-600">Gesti&oacute;n de Clientes</p>
+            <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md">
+                <div class="p-8 xl:px-12">
+                    <h3 class="text-base font-semibold text-purple-600">Inventario</h3>
+                    <p class="mt-3 text-base text-gray-600">Control de tus Productos</p>
 
-                        <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Agregar Cleintes</span>
-                            </li>
+                    <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Agregar Productos </span>
+                        </li>
 
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Actualizar Clientes </span>
-                            </li>
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Actualizar Productos </span>
+                        </li>
 
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Eliminar Clientes </span>
-                            </li>
-                        </ul>
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="h-5 text-indigo-500 flex-shrink-0w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Eliminar Productos </span>
+                        </li>
 
-                        <a href="gestionCliente.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Clientes </a>
-                        <p class="mt-4 text-sm text-gray-500"></p>
-                    </div>
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="h-5 text-indigo-500 flex-shrink-0w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Ver Stock </span>
+                        </li>
+
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="pb-0.5 text-base font-medium text-gray-900 border-b border-black border-dashed"> Actualizar Stock </span>
+                        </li>
+                    </ul>
+
+                    <a href="gestionInventario.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:bg-blue-700" role="button"> Acceder a Inventario </a>
+                    <p class="mt-4 text-sm text-gray-500"></p>
                 </div>
-            <% } %>
+            </div>
 
-            <% if ("Cajero".equals(tipoUsuario) || "Administrador".equals(tipoUsuario)) { %>
-                <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
-                    <div class="p-8 xl:px-12">
-                        <h3 class="text-base font-semibold text-purple-600">Facturas</h3>
-                        <p class="mt-3 text-base text-gray-600">Gesti&oacute;n de Facturas</p>
+            <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
+                <div class="p-8 xl:px-12">
+                    <h3 class="text-base font-semibold text-purple-600">Clientes</h3>
+                    <p class="mt-3 text-base text-gray-600">Gesti&oacute;n de Clientes</p>
 
-                        <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Lista de Facturas </span>
-                            </li>
+                    <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Agregar Cleintes</span>
+                        </li>
 
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Actualizar Facturas </span>
-                            </li>
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Actualizar Clientes </span>
+                        </li>
 
-                            <li class="inline-flex items-center space-x-2">
-                                <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="text-base font-medium text-gray-900"> Eliminar Facturas </span>
-                            </li>
-                        </ul>
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Eliminar Clientes </span>
+                        </li>
+                    </ul>
 
-                        <a href="" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Clientes </a>
-                        <p class="mt-4 text-sm text-gray-500"></p>
-                    </div>
+                    <a href="gestionCliente.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Clientes </a>
+                    <p class="mt-4 text-sm text-gray-500"></p>
                 </div>
-            <% } %>
+            </div>
+
+            <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
+                <div class="p-8 xl:px-12">
+                    <h3 class="text-base font-semibold text-purple-600">Facturas</h3>
+                    <p class="mt-3 text-base text-gray-600">Gesti&oacute;n de Facturas</p>
+
+                    <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Lista de Facturas </span>
+                        </li>
+
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Actualizar Facturas </span>
+                        </li>
+
+                        <li class="inline-flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-base font-medium text-gray-900"> Eliminar Facturas </span>
+                        </li>
+                    </ul>
+
+                    <a href="" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Clientes </a>
+                    <p class="mt-4 text-sm text-gray-500"></p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-
-
-
 </body>
 </html>
