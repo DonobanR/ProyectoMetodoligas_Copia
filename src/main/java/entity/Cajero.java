@@ -4,16 +4,15 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cajero")
-public class Cajero extends Usuario {
+public class Cajero extends Usuario{
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuarioNumeroCedula_numero_cedula")
-    private Usuario supervisor;
+    private Usuario usuarioNumeroCedula;
 
-    public Usuario getSupervisor() {
-        return supervisor;
+    public Usuario getUsuarioNumeroCedula() {
+        return usuarioNumeroCedula;
     }
 
-    public void setSupervisor(Usuario supervisor) {
-        this.supervisor = supervisor;
+    public void setUsuarioNumeroCedula(Usuario usuarioNumeroCedula) {
+        this.usuarioNumeroCedula = usuarioNumeroCedula;
     }
 }

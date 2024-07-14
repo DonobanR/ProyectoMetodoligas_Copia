@@ -2,19 +2,17 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "administradoresinventario")
-public class Administradoresinventario extends Usuario {
-    @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
-    private List<Cajero> cajeros;
+public class Administradoresinventario extends Usuario{
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario usuarioNumeroCedula;
 
-    public List<Cajero> getCajeros() {
-        return cajeros;
+    public Usuario getUsuarioNumeroCedula() {
+        return usuarioNumeroCedula;
     }
 
-    public void setCajeros(List<Cajero> cajeros) {
-        this.cajeros = cajeros;
+    public void setUsuarioNumeroCedula(Usuario usuarioNumeroCedula) {
+        this.usuarioNumeroCedula = usuarioNumeroCedula;
     }
 }

@@ -29,12 +29,15 @@ public class Usuario {
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
+    @Column(name = "tipo_usuario", insertable = false, updatable = false)
+    private String tipoUsuario;  // Añadir este campo
+
     public Integer getNumeroCedula() {
         return numeroCedula;
     }
 
-    public void setNumeroCedula(Integer numeroCedula) {
-        this.numeroCedula = numeroCedula;
+    public void setNumeroCedula(String numeroCedula) {
+        this.numeroCedula = Integer.valueOf(numeroCedula);
     }
 
     public String getNombre() {
@@ -83,5 +86,13 @@ public class Usuario {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario){
+        this.tipoUsuario = tipoUsuario;
     }
 }

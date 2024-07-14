@@ -1,27 +1,79 @@
 package entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cliente")
-@PrimaryKeyJoinColumn(name = "numero_cedula")
-public class Cliente extends Usuario {
+public class Cliente {
+    @Id
+    @Column(name = "numero_cedula", nullable = false)
+    private Integer id;
 
-    // Aquí puedes agregar atributos específicos de Cliente si los hay
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
 
-    public Cliente() {
-        // Constructor vacío requerido por JPA
+    @Column(name = "apellido", nullable = false)
+    private String apellido;
+
+    @Column(name = "direccion")
+    private String direccion;
+
+    @Column(name = "correo")
+    private String correo;
+
+    public Integer getId() {
+        return id;
     }
 
-    public Cliente(Integer numeroCedula, String nombre, String apellido, String direccion, String correo, String usuario, String contrasena) {
-        this.setNumeroCedula(numeroCedula);
-        this.setNombre(nombre);
-        this.setApellido(apellido);
-        this.setDireccion(direccion);
-        this.setCorreo(correo);
-        this.setUsuario(usuario);
-        this.setContrasena(contrasena);
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    // Puedes agregar métodos adicionales si es necesario
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public Cliente(){
+
+    }
+
+    public Cliente(Integer id, String nombre, String apellido, String direccion, String correo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.correo = correo;
+    }
+
 }
