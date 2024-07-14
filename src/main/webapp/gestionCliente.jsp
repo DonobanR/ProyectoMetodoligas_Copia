@@ -184,12 +184,12 @@
                     headerRow.appendChild(headerCell);
                 });
                 data.forEach(cliente => {
-                   var row = table.insertRow();
-                   row.insertCell(0).textContent = cliente.numero_cedula;
-                   row.insertCell(1).textContent = cliente.nombre;
-                   row.insertCell(2).textContent = cliente.apellido;
-                   row.insertCell(3).textContent = cliente.direccion;
-                   row.insertCell(4).textContent = cliente.correo;
+                    var row = table.insertRow();
+                    row.insertCell(0).textContent = cliente.numero_cedula;
+                    row.insertCell(1).textContent = cliente.nombre;
+                    row.insertCell(2).textContent = cliente.apellido;
+                    row.insertCell(3).textContent = cliente.direccion;
+                    row.insertCell(4).textContent = cliente.correo;
 
                 });
             });
