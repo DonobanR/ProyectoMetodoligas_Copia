@@ -1,137 +1,142 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: USUARIO
+  Date: 15/7/2024
+  Time: 16:26
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Venta</title>
+    <title>Módulo de Ventas</title>
+    <style>
+        /* Estilo para el módulo de ventas */
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-bottom: 10px;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        .product-table, .client-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .product-table th, .product-table td, .client-table th, .client-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Función para llenar dinámicamente los clientes y productos al cargar la página
-        window.onload = function() {
-            obtenerClientes();
-            obtenerProductos();
-        };
+        let productos = [];
+        let clientes = [];
+        let venta = [];
 
-        function obtenerClientes() {
-            fetch('obtenerClientes')
-                .then(response => response.json())
-                .then(data => {
-                    var select = document.getElementById('idCliente');
-                    select.innerHTML = '';
-                    data.forEach(cliente => {
-                        var option = document.createElement('option');
-                        option.value = cliente.id;
-                        option.textContent = cliente.id;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error al obtener la lista de clientes:', error));
-        }
+        $(document).ready(function() {
+            // Obtener productos existentes
+            $.getJSON("obtenerProductosVenta", function(data) {
+                productos = data;
+                productos.forEach(function(producto) {
+                    $('#producto').append(`<option value="${producto.id}">${producto.nombreProducto}</option>`);
+                });
+            });
 
-        function obtenerProductos() {
-            fetch('obtenerProductos')
-                .then(response => response.json())
-                .then(data => {
-                    var select = document.getElementById('idProducto');
-                    select.innerHTML = '';
-                    data.forEach(producto => {
-                        var option = document.createElement('option');
-                        option.value = producto.id;
-                        option.textContent = producto.id;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error al obtener la lista de productos:', error));
-        }
+            // Obtener clientes existentes
+            $.getJSON("obtenerClientes", function(data) {
+                clientes = data;
+                clientes.forEach(function(cliente) {
+                    $('#cliente').append(`<option value="${cliente.id}">${cliente.nombre} ${cliente.apellido}</option>`);
+                });
+            });
 
-        function agregarProducto() {
-            var idProducto = document.getElementById('idProducto').options[document.getElementById('idProducto').selectedIndex].value;
-            var cantidad = document.getElementById('cantidad').value;
-            var table = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
+            // Agregar producto a la tabla de ventas
+            $('#agregarProducto').click(function() {
+                const productoId = $('#producto').val();
+                const cantidad = $('#cantidad').val();
+                const producto = productos.find(p => p.id == productoId);
 
-            fetch(`buscarProducto?id=${idProducto}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // Parsea la respuesta como JSON
-                })
-                .then(producto => {
-                    console.log('Producto recibido:', producto); // Loguea el producto recibido para verificar
+                if (producto && cantidad > 0) {
+                    const total = producto.precio * cantidad;
+                    venta.push({ ...producto, cantidad, total });
 
-                    // Inserta una nueva fila en la tabla
-                    var row = table.insertRow();
-                    row.insertCell(0).textContent = producto.nombreProducto; // Ajusta según la estructura del objeto recibido
-                    row.insertCell(1).textContent = cantidad;
-                    row.insertCell(2).textContent = producto.precio.toFixed(2); // Ajusta según la estructura del objeto recibido
-                    row.insertCell(3).textContent = (producto.precio * cantidad).toFixed(2); // Calcula el total y formatea
+                    let fila = `
+                        <tr>
+                            <td>${producto.nombreProducto}</td>
+                            <td>${cantidad}</td>
+                            <td>${producto.precio}</td>
+                            <td>${producto.marca}</td>
+                            <td>${total}</td>
+                        </tr>`;
+                    $('#tablaVentas tbody').append(fila);
+                    actualizarTotal();
+                } else {
+                    alert("Selecciona un producto y una cantidad válida.");
+                }
+            });
 
-                    // Actualiza los totales después de agregar el producto
-                    actualizarTotales();
-                })
-                .catch(error => console.error('Error al obtener el producto:', error));
-        }
+            // Mostrar datos del cliente seleccionado
+            $('#cliente').change(function() {
+                const clienteId = $(this).val();
+                const cliente = clientes.find(c => c.id == clienteId);
 
+                if (cliente) {
+                    $('#datosCliente').html(`
+                        <p>Nombre: ${cliente.nombre} ${cliente.apellido}</p>
+                        <p>Dirección: ${cliente.direccion}</p>
+                        <p>Correo: ${cliente.correo}</p>
+                    `);
+                }
+            });
 
-
-
-
-
-        function actualizarTotales() {
-            var table = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
-            var subtotal = 0;
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                subtotal += parseFloat(row.cells[3].textContent);
+            function actualizarTotal() {
+                const totalVenta = venta.reduce((acc, prod) => acc + prod.total, 0);
+                $('#totalVenta').text(`Total Venta: $${totalVenta}`);
             }
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-            document.getElementById('totalIVA').textContent = (subtotal * 1.15).toFixed(2);
-        }
-
-        function generarVenta() {
-            // Implementar la lógica para generar la venta
-        }
+        });
     </script>
 </head>
 <body>
-<h1>Registrar Venta</h1>
-<div>
-    <label for="idCliente">Seleccionar Cliente:</label>
-    <select id="idCliente">
-        <!-- Aquí se llenarán dinámicamente los clientes -->
+<div class="section">
+    <h2>Seleccione Productos</h2>
+    <select id="producto">
+        <option value="">Seleccione un producto</option>
     </select>
-</div>
-<div>
-    <label for="idProducto">Seleccionar Producto:</label>
-    <select id="idProducto">
-        <!-- Las opciones de los productos se llenarán dinámicamente desde JavaScript -->
-    </select>
-    <label for="cantidad">Cantidad:</label>
-    <input type="number" id="cantidad" min="1">
-    <button onclick="agregarProducto()">Agregar Producto</button>
+    <input type="number" id="cantidad" placeholder="Cantidad">
+    <button id="agregarProducto">Agregar Producto</button>
 </div>
 
-<table id="tablaProductos" border="1">
-    <thead>
-    <tr>
-        <th>Nombre del Producto</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Precio Total Unitario</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Aquí se agregarán dinámicamente las filas de productos -->
-    </tbody>
-</table>
-<div>
-    <p>Subtotal: <span id="subtotal">0.00</span></p>
-    <p>Total IVA (15%): <span id="totalIVA">0.00</span></p>
+<div class="table-container">
+    <h2>Detalle de Venta</h2>
+    <table id="tablaVentas" class="product-table">
+        <thead>
+        <tr>
+            <th>Nombre Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Marca</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Productos agregados aparecerán aquí -->
+        </tbody>
+    </table>
+    <p id="totalVenta">Total Venta: $0</p>
 </div>
-<div>
-    <label for="idDescuento">Descuentos disponibles:</label>
-    <ul id="idDescuento">
-        <!-- Aquí se llenarán dinámicamente los descuentos -->
-    </ul>
+
+<div class="section">
+    <h2>Seleccione Cliente</h2>
+    <select id="cliente">
+        <option value="">Seleccione un cliente</option>
+    </select>
+    <div id="datosCliente">
+        <!-- Datos del cliente seleccionado aparecerán aquí -->
+    </div>
 </div>
-<button onclick="generarVenta()">Generar Venta</button>
 </body>
 </html>

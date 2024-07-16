@@ -75,7 +75,7 @@
                             </li>
                         </ul>
 
-                        <a href="venta.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Ventas </a>
+                        <a href="cliente.jsp" title="" class="inline-flex items-center justify-center px-10 py-4 mt-10 text-base font-semibold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 hover:opacity-80 focus:opacity-80" role="button"> Acceder a Ventas </a>
                         <p class="mt-4 text-sm text-gray-500"></p>
                     </div>
                 </div>

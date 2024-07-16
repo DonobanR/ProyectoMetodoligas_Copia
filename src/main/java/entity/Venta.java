@@ -2,6 +2,8 @@ package entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ventas")
@@ -11,23 +13,21 @@ public class Venta {
     @Column(name = "idVenta", nullable = false)
     private Integer idVenta;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "numeroCedula", nullable = false) // Asumo que numeroCedula es el ID del Cajero
-    private Cajero cajero;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cedulaCliente", nullable = false) // Asumo que cedulaCliente es la cédula del Cliente
+    @ManyToOne
+    @JoinColumn(name = "numero_cedula", nullable = false)
     private Cliente cliente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idDescuento")
-    private Descuento descuento;
+    @Column(name = "fecha", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
-    @Column(name = "numeroProductos", nullable = false)
-    private Integer numeroProductos;
+    @Column(name = "total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal total;
 
-    @Column(name = "totalVenta", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalVenta;
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetallesVenta> detalles;
+
+    // Getters y Setters
 
     public Integer getIdVenta() {
         return idVenta;
@@ -35,14 +35,6 @@ public class Venta {
 
     public void setIdVenta(Integer idVenta) {
         this.idVenta = idVenta;
-    }
-
-    public Cajero getCajero() {
-        return cajero;
-    }
-
-    public void setCajero(Cajero cajero) {
-        this.cajero = cajero;
     }
 
     public Cliente getCliente() {
@@ -53,27 +45,27 @@ public class Venta {
         this.cliente = cliente;
     }
 
-    public Descuento getDescuento() {
-        return descuento;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setDescuento(Descuento descuento) {
-        this.descuento = descuento;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
-    public Integer getNumeroProductos() {
-        return numeroProductos;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setNumeroProductos(Integer numeroProductos) {
-        this.numeroProductos = numeroProductos;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
-    public BigDecimal getTotalVenta() {
-        return totalVenta;
+    public List<DetallesVenta> getDetalles() {
+        return detalles;
     }
 
-    public void setTotalVenta(BigDecimal totalVenta) {
-        this.totalVenta = totalVenta;
+    public void setDetalles(List<DetallesVenta> detalles) {
+        this.detalles = detalles;
     }
 }

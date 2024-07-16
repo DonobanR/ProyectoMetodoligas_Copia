@@ -11,9 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"/obtenerProductos", "/buscarProducto"})
+@WebServlet({"/obtenerProductos", "/buscarProductos"})
 public class InventarioService extends HttpServlet {
     private final ProductoDAO productoDAO = new ProductoDAO();
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String filtro = request.getParameter("filtro");
         String terminoBusqueda = request.getParameter("terminoBusqueda");
