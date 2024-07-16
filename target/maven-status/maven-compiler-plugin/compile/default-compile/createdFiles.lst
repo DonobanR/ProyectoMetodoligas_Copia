@@ -3,6 +3,7 @@ servlets\cliente\AgregarClienteServlet.class
 incrementos\VerificarPagoGateway.class
 util\ConexionBD.class
 servlets\inventario\producto\ActualizarProductoServlet.class
+servlets\venta\GuardarVentaServlet.class
 execute\ExecuteProductoDAO.class
 execute\ExecuteDescuentoDAO.class
 incrementos\Pago.class
@@ -22,7 +23,6 @@ entity\DetallesVenta.class
 servlets\cliente\VerificarCorreoServlet.class
 incrementos\SaldoInsuficienteException.class
 servlets\inventario\descuento\BuscarDescuentoPorIdServlet.class
-dao\ExecuteClienteDAO.class
 dao\VentaDetalleDAO.class
 servlets\cliente\EliminarClienteServlet.class
 incrementos\VerificarPagoRequest.class

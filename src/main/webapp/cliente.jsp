@@ -148,6 +148,11 @@
     </table>
 </div>
 
+<br>
+
+<button id="guardarVenta" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Guardar Venta</button>
+
+
 <script>
     function eliminarFila(button) {
         $(button).closest('tr').remove();
@@ -164,6 +169,59 @@
 
         $('#totalGeneral').text(totalGeneral.toFixed(2));
     }
+</script>
+
+<script>
+    function mostrarNotificacion(mensaje) {
+        $('#notificacion').html('<p>' + mensaje + '</p>').fadeIn().delay(3000).fadeOut();
+    }
+
+    function mostrarError(mensaje) {
+        $('#mensajeError').html('<p style="color: red;">' + mensaje + '</p>');
+    }
+
+    function limpiarError() {
+        $('#mensajeError').empty();
+    }
+
+    $(document).ready(function () {
+        $('#guardarVenta').click(function () {
+            const cliente = {
+                id: $('#numeroCedula').val(),
+                // Añadir otros campos del cliente si es necesario
+            };
+
+            const productos = [];
+            $('#tablaProductos tbody tr').each(function () {
+                const id = $(this).data('id');
+                const nombre = $(this).find('.nombre').text();
+                const precio = parseFloat($(this).find('.precio').text());
+                const cantidad = parseInt($(this).find('.cantidad').text());
+                productos.push({ id, nombre, precio, stock: cantidad });
+            });
+
+            $.ajax({
+                url: 'guardarVenta',
+                method: 'POST',
+                data: {
+                    cliente: JSON.stringify(cliente),
+                    productos: JSON.stringify(productos)
+                },
+                success: function (response) {
+                    if (response.success) {
+                        mostrarNotificacion('Venta guardada exitosamente.');
+                        $('#tablaProductos tbody').empty();
+                        $('#totalGeneral').text('0.00');
+                    } else {
+                        mostrarError('Error al guardar la venta.');
+                    }
+                },
+                error: function () {
+                    mostrarError('Error al guardar la venta.');
+                }
+            });
+        });
+    });
 </script>
 
 </body>
