@@ -38,6 +38,7 @@ servlets\cliente\ClienteService.class
 dao\CajeroDAO$OperacionTransaccional.class
 dao\CajeroDAO.class
 servlets\inventario\descuento\BuscarProductoPorIdServlet.class
+servlets\venta\BuscarVentaService.class
 dao\UsuarioDAO.class
 servlets\usuario\LoginServlet.class
 dao\DescuentoDAO$OperacionTransaccional.class

@@ -21,6 +21,13 @@
     <input type="submit" value="Cargar Ventas">
 </form>
 
+<!-- Formulario para buscar una venta por ID -->
+<form action="buscarVenta" method="get">
+    <label for="idVenta">ID Venta:</label>
+    <input type="text" id="idVenta" name="idVenta">
+    <input type="submit" value="Buscar Venta">
+</form>
+
 <table border="1">
     <thead>
     <tr>
@@ -33,8 +40,47 @@
     <tbody>
     <%
         List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
+        Venta venta = (Venta) request.getAttribute("venta");
         if (ventas != null) {
-            for (Venta venta : ventas) {
+            for (Venta v : ventas) {
+    %>
+    <tr>
+        <td><%= v.getIdVenta() %></td>
+        <td><%= v.getFecha() %></td>
+        <td><%= v.getTotal() %></td>
+        <td>
+            <table border="1">
+                <thead>
+                <tr>
+                    <th>ID Detalle</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                    List<DetallesVenta> detalles = v.getDetalles();
+                    if (detalles != null) {
+                        for (DetallesVenta detalle : detalles) {
+                %>
+                <tr>
+                    <td><%= detalle.getIdDetalle() %></td>
+                    <td><%= detalle.getCantidad() %></td>
+                    <td><%= detalle.getPrecio() %></td>
+                    <td><%= detalle.getTotal() %></td>
+                </tr>
+                <%
+                        }
+                    }
+                %>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <%
+        }
+    } else if (venta != null) {
     %>
     <tr>
         <td><%= venta.getIdVenta() %></td>
@@ -71,7 +117,6 @@
         </td>
     </tr>
     <%
-            }
         }
     %>
     </tbody>

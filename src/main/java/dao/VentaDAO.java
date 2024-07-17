@@ -60,4 +60,31 @@ public class VentaDAO {
 
         return ventas;
     }
+
+    public Venta obtenerVentaPorId(int idVenta) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        Venta venta = null;
+
+        try {
+            transaction = session.beginTransaction();
+            venta = session.get(Venta.class, idVenta);
+
+            // Inicializar las colecciones perezosas
+            if (venta != null) {
+                Hibernate.initialize(venta.getDetalles());
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return venta;
+    }
 }

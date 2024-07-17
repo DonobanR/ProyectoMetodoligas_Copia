@@ -32,6 +32,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\Produc
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\producto\EliminarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\descuento\AgregarDescuentoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\util\ConexionBD.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\venta\BuscarVentaService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\venta\VentaServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\descuento\BuscarProductoPorIdServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\CajeroDAO.java
