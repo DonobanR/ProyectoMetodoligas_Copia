@@ -10,6 +10,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\i
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\cliente\VerificarCorreoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\cliente\ClienteServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Usuario.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\venta\VentaService.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\descuento\BuscarDescuentoPorIdServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\execute\ExecuteProductoDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\VerificarPagoResponse.java
@@ -36,6 +37,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\i
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\CajeroDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\DetallesVenta.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\producto\AgregarProductoServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\execute\TestVentaDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\producto\ObtenerProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\usuario\LoginServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ClienteDAO.java

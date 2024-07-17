@@ -21,6 +21,7 @@ servlets\inventario\producto\InventarioService.class
 servlets\inventario\descuento\DescuentoService.class
 entity\DetallesVenta.class
 servlets\cliente\VerificarCorreoServlet.class
+servlets\venta\VentaService.class
 incrementos\SaldoInsuficienteException.class
 servlets\inventario\descuento\BuscarDescuentoPorIdServlet.class
 dao\VentaDetalleDAO.class
@@ -30,6 +31,7 @@ entity\Venta.class
 servlets\inventario\producto\AgregarProductoServlet.class
 entity\Cajero.class
 incrementos\VerificarPagoResponse.class
+execute\TestVentaDAO.class
 servlets\inventario\producto\EliminarProductoServlet.class
 servlets\cliente\ClienteServlet.class
 servlets\cliente\ClienteService.class
