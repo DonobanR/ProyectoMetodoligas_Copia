@@ -20,7 +20,7 @@ steps:
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)/target'
-    Contents: '**/MetodologiasProyecto_Proyecto-1.0-SNAPSHOT.war'
+    Contents: '**/MetodologiasProyecto_Proyecto-1.0-SNAPSHOT'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     CleanTargetFolder: true
     preserveTimestamp: true
