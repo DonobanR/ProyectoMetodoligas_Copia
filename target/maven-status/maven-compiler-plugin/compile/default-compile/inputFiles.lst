@@ -8,6 +8,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\c
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Descuento.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\producto\ActualizarProductoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\cliente\VerificarCorreoServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\venta\GuardarVentaServletB.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\cliente\ClienteServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Usuario.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\venta\VentaService.java
@@ -43,6 +44,7 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\i
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\usuario\LoginServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\ClienteDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Venta.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\entity\Factura.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\execute\ExecuteDescuentoDAO.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incrementos\VerificarPagoGateway.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\producto\BuscarProductoServlet.java
@@ -52,3 +54,4 @@ C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\incremento
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\hash\PasswordHasher.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\inventario\descuento\ActualizarDescuentoServlet.java
 C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\servlets\usuario\RegistroServlet.java
+C:\Users\USUARIO\IdeaProjects\ProyectoMetodoligas_Copia\src\main\java\dao\FacturaDAO.java

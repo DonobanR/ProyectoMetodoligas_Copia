@@ -11,12 +11,12 @@
 <%@ page import="entity.DetallesVenta" %>
 <html>
 <head>
-    <title>Lista de Ventas</title>
+    <title>Lista de Facturas</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-900">
 <div class="container mx-auto p-4">
-    <h2 class="text-2xl font-bold mb-4">Lista de Ventas</h2>
+    <h2 class="text-2xl font-bold mb-4">Lista de Facturas</h2>
 
     <!-- Botón para cargar las ventas -->
     <form action="obtenerVentas" method="get" class="mb-4">

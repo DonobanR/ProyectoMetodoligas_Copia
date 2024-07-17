@@ -201,20 +201,24 @@
             });
 
             $.ajax({
-                url: 'guardarVenta',
+                url: 'guardarVentaB',
                 method: 'POST',
                 data: {
                     cliente: JSON.stringify(cliente),
                     productos: JSON.stringify(productos)
                 },
+                xhrFields: {
+                    responseType: 'blob'
+                },
                 success: function (response) {
-                    if (response.success) {
-                        mostrarNotificacion('Venta guardada exitosamente.');
-                        $('#tablaProductos tbody').empty();
-                        $('#totalGeneral').text('0.00');
-                    } else {
-                        mostrarError('Error al guardar la venta.');
-                    }
+                    const blob = new Blob([response], { type: 'application/pdf' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'factura.pdf';
+                    link.click();
+                    mostrarNotificacion('Venta guardada exitosamente.');
+                    $('#tablaProductos tbody').empty();
+                    $('#totalGeneral').text('0.00');
                 },
                 error: function () {
                     mostrarError('Error al guardar la venta.');

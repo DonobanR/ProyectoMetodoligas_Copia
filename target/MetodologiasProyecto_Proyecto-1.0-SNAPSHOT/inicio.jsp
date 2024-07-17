@@ -82,22 +82,22 @@
 
                 <div class="overflow-hidden bg-white border-2 border-gray-100 rounded-md shadow-lg">
                     <div class="p-8 xl:px-12">
-                        <h3 class="text-base font-semibold text-purple-600">Ventas</h3>
-                        <p class="mt-3 text-base text-gray-600">Visualizacion de Ventas</p>
+                        <h3 class="text-base font-semibold text-purple-600">Facturas</h3>
+                        <p class="mt-3 text-base text-gray-600">Visualizacion de Facturas</p>
 
                         <ul class="inline-flex flex-col items-start space-y-5 text-left mt-9">
                             <li class="inline-flex items-center space-x-2">
                                 <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="text-base font-medium text-gray-900"> Ventas Realizadas </span>
+                                <span class="text-base font-medium text-gray-900"> Ventas y Facturas Realizadas </span>
                             </li>
 
                             <li class="inline-flex items-center space-x-2">
                                 <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="text-base font-medium text-gray-900"> Informacion Detalladas </span>
+                                <span class="text-base font-medium text-gray-900"> Informacion de Venta Detalladas </span>
                             </li>
 
                             <li class="inline-flex items-center space-x-2">
@@ -111,7 +111,7 @@
                                 <svg class="flex-shrink-0 w-5 h-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="text-base font-medium text-gray-900"> Control de Ventas </span>
+                                <span class="text-base font-medium text-gray-900"> Control de Facturas y Ventas </span>
                             </li>
 
                             <li class="inline-flex items-center space-x-2">

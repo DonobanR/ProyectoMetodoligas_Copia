@@ -1,13 +1,16 @@
 servlets\inventario\descuento\AgregarDescuentoServlet.class
 servlets\cliente\AgregarClienteServlet.class
 incrementos\VerificarPagoGateway.class
+entity\Factura.class
 util\ConexionBD.class
 servlets\inventario\producto\ActualizarProductoServlet.class
+dao\FacturaDAO.class
 servlets\venta\GuardarVentaServlet.class
 execute\ExecuteProductoDAO.class
 execute\ExecuteDescuentoDAO.class
 incrementos\Pago.class
 entity\Usuario.class
+servlets\venta\GuardarVentaServletB.class
 servlets\inventario\descuento\ActualizarDescuentoServlet.class
 servlets\inventario\producto\ObtenerProductoServlet.class
 dao\ClienteDAO.class
