@@ -12,114 +12,117 @@
 <html>
 <head>
     <title>Lista de Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<h2>Lista de Ventas</h2>
+<body class="bg-gray-100 text-gray-900">
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Lista de Ventas</h2>
 
-<!-- Botón para cargar las ventas -->
-<form action="obtenerVentas" method="get">
-    <input type="submit" value="Cargar Ventas">
-</form>
+    <!-- Botón para cargar las ventas -->
+    <form action="obtenerVentas" method="get" class="mb-4">
+        <input type="submit" value="Cargar Ventas" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    </form>
 
-<!-- Formulario para buscar una venta por ID -->
-<form action="buscarVenta" method="get">
-    <label for="idVenta">ID Venta:</label>
-    <input type="text" id="idVenta" name="idVenta">
-    <input type="submit" value="Buscar Venta">
-</form>
+    <!-- Formulario para buscar una venta por ID -->
+    <form action="buscarVenta" method="get" class="mb-4">
+        <label for="idVenta" class="block text-sm font-medium text-gray-700">ID Venta:</label>
+        <input type="text" id="idVenta" name="idVenta" class="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm">
+        <input type="submit" value="Buscar Venta" class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+    </form>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID Venta</th>
-        <th>Fecha</th>
-        <th>Total</th>
-        <th>Detalles</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-        List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
-        Venta venta = (Venta) request.getAttribute("venta");
-        if (ventas != null) {
-            for (Venta v : ventas) {
-    %>
-    <tr>
-        <td><%= v.getIdVenta() %></td>
-        <td><%= v.getFecha() %></td>
-        <td><%= v.getTotal() %></td>
-        <td>
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>ID Detalle</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                <%
-                    List<DetallesVenta> detalles = v.getDetalles();
-                    if (detalles != null) {
-                        for (DetallesVenta detalle : detalles) {
-                %>
-                <tr>
-                    <td><%= detalle.getIdDetalle() %></td>
-                    <td><%= detalle.getCantidad() %></td>
-                    <td><%= detalle.getPrecio() %></td>
-                    <td><%= detalle.getTotal() %></td>
-                </tr>
-                <%
+    <table class="min-w-full bg-white border-collapse block md:table">
+        <thead class="block md:table-header-group">
+        <tr class="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+            <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">ID Venta</th>
+            <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Fecha</th>
+            <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Total</th>
+            <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Detalles</th>
+        </tr>
+        </thead>
+        <tbody class="block md:table-row-group">
+        <%
+            List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
+            Venta venta = (Venta) request.getAttribute("venta");
+            if (ventas != null) {
+                for (Venta v : ventas) {
+        %>
+        <tr class="bg-gray-100 border border-gray-300 md:border-none block md:table-row">
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= v.getIdVenta() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= v.getFecha() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= v.getTotal() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                <table class="min-w-full bg-white border-collapse block md:table">
+                    <thead class="block md:table-header-group">
+                    <tr class="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">ID Detalle</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Cantidad</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Precio</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody class="block md:table-row-group">
+                    <%
+                        List<DetallesVenta> detalles = v.getDetalles();
+                        if (detalles != null) {
+                            for (DetallesVenta detalle : detalles) {
+                    %>
+                    <tr class="bg-gray-100 border border-gray-300 md:border-none block md:table-row">
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getIdDetalle() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getCantidad() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getPrecio() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getTotal() %></td>
+                    </tr>
+                    <%
+                            }
                         }
-                    }
-                %>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <%
-        }
-    } else if (venta != null) {
-    %>
-    <tr>
-        <td><%= venta.getIdVenta() %></td>
-        <td><%= venta.getFecha() %></td>
-        <td><%= venta.getTotal() %></td>
-        <td>
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>ID Detalle</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                <%
-                    List<DetallesVenta> detalles = venta.getDetalles();
-                    if (detalles != null) {
-                        for (DetallesVenta detalle : detalles) {
-                %>
-                <tr>
-                    <td><%= detalle.getIdDetalle() %></td>
-                    <td><%= detalle.getCantidad() %></td>
-                    <td><%= detalle.getPrecio() %></td>
-                    <td><%= detalle.getTotal() %></td>
-                </tr>
-                <%
+                    %>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <%
+            }
+        } else if (venta != null) {
+        %>
+        <tr class="bg-gray-100 border border-gray-300 md:border-none block md:table-row">
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= venta.getIdVenta() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= venta.getFecha() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= venta.getTotal() %></td>
+            <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                <table class="min-w-full bg-white border-collapse block md:table">
+                    <thead class="block md:table-header-group">
+                    <tr class="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">ID Detalle</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Cantidad</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Precio</th>
+                        <th class="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody class="block md:table-row-group">
+                    <%
+                        List<DetallesVenta> detalles = venta.getDetalles();
+                        if (detalles != null) {
+                            for (DetallesVenta detalle : detalles) {
+                    %>
+                    <tr class="bg-gray-100 border border-gray-300 md:border-none block md:table-row">
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getIdDetalle() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getCantidad() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getPrecio() %></td>
+                        <td class="p-2 md:border md:border-gray-300 text-left block md:table-cell"><%= detalle.getTotal() %></td>
+                    </tr>
+                    <%
+                            }
                         }
-                    }
-                %>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <%
-        }
-    %>
-    </tbody>
-</table>
+                    %>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <%
+            }
+        %>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
