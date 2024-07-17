@@ -32,6 +32,7 @@ servlets\cliente\EliminarClienteServlet.class
 incrementos\VerificarPagoRequest.class
 entity\Venta.class
 servlets\inventario\producto\AgregarProductoServlet.class
+util\EmailSender.class
 entity\Cajero.class
 incrementos\VerificarPagoResponse.class
 execute\TestVentaDAO.class
@@ -41,6 +42,7 @@ servlets\cliente\ClienteService.class
 dao\CajeroDAO$OperacionTransaccional.class
 dao\CajeroDAO.class
 servlets\inventario\descuento\BuscarProductoPorIdServlet.class
+util\EmailSender$1.class
 servlets\venta\BuscarVentaService.class
 dao\UsuarioDAO.class
 servlets\usuario\LoginServlet.class

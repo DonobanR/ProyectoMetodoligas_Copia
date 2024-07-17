@@ -18,6 +18,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import util.EmailSender;
 
 @WebServlet("/guardarVentaB")
 public class GuardarVentaServletB extends HttpServlet {
@@ -125,6 +127,8 @@ public class GuardarVentaServletB extends HttpServlet {
             res.setHeader("Content-Disposition", "attachment; filename=factura.pdf");
             res.getOutputStream().write(baos.toByteArray());
             res.getOutputStream().flush();
+
+            EmailSender.enviarCorreoElectronico(cliente.getCorreo(), baos.toByteArray());
 
             res.getWriter().write("{\"success\": true}");
         } catch (Exception e) {
