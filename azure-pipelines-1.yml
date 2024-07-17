@@ -1,4 +1,5 @@
 # Maven
+
 # Build your Java project and run tests with Apache Maven.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
@@ -24,8 +25,8 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**/*.jar'
+    SourceFolder: '$(Build.SourcesDirectory)/target'
+    Contents: '**/MetodologiasProyecto_Proyecto-1.0-SNAPSHOT.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     CleanTargetFolder: true
     preserveTimestamp: true
@@ -38,14 +39,3 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
     condition: succeededOrFailed()
-
-- task: AzureRmWebAppDeployment@4
-  displayName: 'Deploy Azure App Service'
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'SistemaPuntoVenta'  # Nombre de tu conexión de servicio de Azure
-    appType: 'webAppLinux'
-    WebAppName: 'SistemaPuntoVenta'  # Nombre de tu App Service en Azure
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.jar'  # Patrón para encontrar el archivo JAR o WAR generado
-    runtimeStack: 'JAVA|17-java17'
-    startupCommand: 'java -jar $(Build.ArtifactStagingDirectory)/**/*.jar'  # Comando de inicio de tu aplicación Java
