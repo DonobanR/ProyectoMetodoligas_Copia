@@ -4,6 +4,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  ConnectedServiceName: '49cdb8b4-9c0c-42ac-aa71-6c404791467a'
+  WebAppKind: 'webAppLinux'
+  WebAppName: 'SistemaPuntoVenta'
+
 steps:
 - task: Maven@3
   inputs:
@@ -20,7 +25,7 @@ steps:
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)/target'
-    Contents: '**/MetodologiasProyecto_Proyecto-1.0-SNAPSHOT/**'
+    Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     CleanTargetFolder: true
     preserveTimestamp: true
@@ -31,3 +36,14 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy Azure App Service'
+  inputs:
+    azureSubscription: '$(ConnectedServiceName)'
+    appType: '$(WebAppKind)'
+    WebAppName: '$(WebAppName)'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'WebAPP'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/_DonobanR.ProyectoMetodoligas_Copia (16)/drop'
+    RuntimeStack: 'TOMCAT|10.1-java17'
