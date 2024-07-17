@@ -1,0 +1,65 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ConnectedServiceName: '49cdb8b4-9c0c-42ac-aa71-6c404791467a'
+  WebAppKind: 'webAppLinux'
+  WebAppName: 'SistemaPuntoVenta'
+
+steps:
+- task: Maven@3
+  displayName: 'Build with Maven'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '17'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- script: |
+    echo "Listing files in target directory:"
+    ls -la $(Build.SourcesDirectory)/target
+  displayName: 'List files in target directory'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to Staging Directory'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/target'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    preserveTimestamp: true
+
+- script: |
+    echo "Listing files in staging directory:"
+    ls -la $(Build.ArtifactStagingDirectory)
+  displayName: 'List files in staging directory'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy Azure App Service'
+  inputs:
+    azureSubscription: '$(ConnectedServiceName)'
+    appType: '$(WebAppKind)'
+    WebAppName: '$(WebAppName)'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'WebAPP'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)'
+    RuntimeStack: 'TOMCAT|10.1-java17'
