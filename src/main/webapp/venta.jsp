@@ -218,7 +218,7 @@
                     link.click();
                     mostrarNotificacion('Venta guardada exitosamente.');
                     $('#tablaProductos tbody').empty();
-                    $('#totalGeneral').text('0.00');
+                    $('#totalGeneral').text('1.00');
                 },
                 error: function () {
                     mostrarError('Error al guardar la venta.');

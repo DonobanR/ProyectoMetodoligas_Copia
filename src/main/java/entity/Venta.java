@@ -2,6 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Venta {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DetallesVenta> detalles;
+    private List<DetallesVenta> detalles = new ArrayList<>();
 
     // Getters y Setters
 

@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
-import util.EmailSender;
+import com.itextpdf.text.Image;
+
 
 @WebServlet("/guardarVentaB")
 public class GuardarVentaServletB extends HttpServlet {
@@ -41,6 +42,9 @@ public class GuardarVentaServletB extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String clienteJson = req.getParameter("cliente");
         String productosJson = req.getParameter("productos");
+
+        System.out.println(clienteJson);
+        System.out.println(productosJson);
 
         if (clienteJson == null || productosJson == null) {
             res.getWriter().write("{\"success\": false}");
@@ -99,10 +103,15 @@ public class GuardarVentaServletB extends HttpServlet {
             PdfWriter.getInstance(document, baos);
             document.open();
 
+            //Image img = Image.getInstance("aqui escribir el path para una imagen");
+            //img.scaleToFit(100, 100); // Ajustar tamaño según necesidad
+            //img.setAlignment(Image.ALIGN_CENTER);
+            //document.add(img);
             document.add(new Paragraph("Factura"));
             document.add(new Paragraph("Cliente: " + cliente.getNombre() + " " + cliente.getApellido()));
+            document.add(new Paragraph("Numero CI: " + cliente.getId()));
             document.add(new Paragraph("Fecha: " + new java.sql.Date(System.currentTimeMillis())));
-            document.add(new Paragraph("Total: $" + total));
+            document.add(new Paragraph("\n"));
 
             com.itextpdf.text.pdf.PdfPTable table = new com.itextpdf.text.pdf.PdfPTable(5);
             table.addCell("ID");
@@ -120,20 +129,22 @@ public class GuardarVentaServletB extends HttpServlet {
             }
 
             document.add(table);
+            document.add(new Paragraph("Total: $" + total));
             document.close();
 
             // Enviar el PDF en la respuesta
             res.setContentType("application/pdf");
             res.setHeader("Content-Disposition", "attachment; filename=factura.pdf");
             res.getOutputStream().write(baos.toByteArray());
-            res.getOutputStream().flush();
+            res.getOutputStream().close();
 
-            EmailSender.enviarCorreoElectronico(cliente.getCorreo(), baos.toByteArray());
-
-            res.getWriter().write("{\"success\": true}");
         } catch (Exception e) {
             e.printStackTrace();
-            res.getWriter().write("{\"success\": false}");
+            if (!res.isCommitted()) {
+                res.reset();
+                res.setContentType("application/json");
+                res.getWriter().write("{\"success\": false, \"error\": \"Error interno del servidor.\"}");
+            }
         }
     }
 }
