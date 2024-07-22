@@ -2,6 +2,7 @@ package servlets.cliente;
 
 import dao.ClienteDAO;
 import entity.Cliente;
+import comprobration.Comprobations;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,36 +15,32 @@ import java.io.IOException;
 public class ObtenerClienteServlet extends HttpServlet {
 
     private final ClienteDAO clienteDAO = new ClienteDAO();
+    private Comprobations comprobations = new Comprobations();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         String numeroCedula = req.getParameter("numeroCedula");
-        response.setContentType("text/html");
-
-        if (numeroCedula == null || numeroCedula.isEmpty()) {
-            response.getWriter().write("<p style='color: red;'>El parámetro 'numeroCedula' es obligatorio.</p>");
-            return;
-        }
 
         try {
-            Integer cedula = Integer.parseInt(numeroCedula);
-            Cliente cliente = clienteDAO.obtenerClientePorCedula(cedula);
+            if (numeroCedula != null && comprobations.verificarCedulaEcuatoriana(numeroCedula)) {
+                Cliente cliente = clienteDAO.obtenerClientePorCedula(Integer.parseInt(numeroCedula));
 
-            if (cliente == null) {
-                response.getWriter().write("<p style='color: red;'>Cliente no encontrado.</p>");
-                return;
+                if (cliente == null) {
+                    response.getWriter().write("<p style='color: red;'>Cliente no encontrado.</p>");
+                    return;
+                }
+
+                StringBuilder clienteHtml = new StringBuilder();
+                clienteHtml.append("<h2>Datos del Cliente</h2>");
+                clienteHtml.append("<p><strong>Cédula:</strong> ").append(cliente.getId()).append("</p>");
+                clienteHtml.append("<p><strong>Nombre:</strong> ").append(cliente.getNombre()).append("</p>");
+                clienteHtml.append("<p><strong>Apellido:</strong> ").append(cliente.getApellido()).append("</p>");
+                clienteHtml.append("<p><strong>Dirección:</strong> ").append(cliente.getDireccion()).append("</p>");
+                clienteHtml.append("<p><strong>Correo:</strong> ").append(cliente.getCorreo()).append("</p>");
+                response.getWriter().write(clienteHtml.toString());
             }
-
-            StringBuilder clienteHtml = new StringBuilder();
-            clienteHtml.append("<h2>Datos del Cliente</h2>");
-            clienteHtml.append("<p><strong>Cédula:</strong> ").append(cliente.getId()).append("</p>");
-            clienteHtml.append("<p><strong>Nombre:</strong> ").append(cliente.getNombre()).append("</p>");
-            clienteHtml.append("<p><strong>Apellido:</strong> ").append(cliente.getApellido()).append("</p>");
-            clienteHtml.append("<p><strong>Dirección:</strong> ").append(cliente.getDireccion()).append("</p>");
-            clienteHtml.append("<p><strong>Correo:</strong> ").append(cliente.getCorreo()).append("</p>");
-            response.getWriter().write(clienteHtml.toString());
-        } catch (NumberFormatException e) {
-            response.getWriter().write("<p style='color: red;'>El parámetro 'numeroCedula' debe ser un número válido.</p>");
+        } catch (IllegalArgumentException e) {
+            response.getWriter().write("<p style='color: red;'>" + e.getMessage() + "</p>");
         }
     }
 }

@@ -8,32 +8,44 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import comprobration.Comprobations;
 
 @WebServlet("/agregarCliente")
 public class AgregarClienteServlet extends HttpServlet {
     private ClienteDAO clienteDAO = new ClienteDAO();
+    private Comprobations comprobations = new Comprobations();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener los datos del formulario
-        int numeroCedula = Integer.parseInt(request.getParameter("numero_cedula"));
+        String numeroCedula = request.getParameter("numero_cedula");
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         String direccion = request.getParameter("direccion");
         String correo = request.getParameter("correo");
 
-        // Crear un objeto Cliente con los datos recibidos
-        Cliente cliente = new Cliente();
-        cliente.setId(numeroCedula);
-        cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
-        cliente.setDireccion(direccion);
-        cliente.setCorreo(correo);
+        try {
+            if (!comprobations.verificarCedulaEcuatoriana(numeroCedula)) {
+                // Establece el mensaje de error y redirige de nuevo al modal
+                request.setAttribute("error", "La cédula no es válida");
+                request.getRequestDispatcher("gestionClientes.jsp").forward(request, response);
+                return;
+            }
 
-        // Guardar el cliente en la base de datos
-        clienteDAO.guardarCliente(cliente);
+            Cliente cliente = new Cliente();
+            cliente.setId(Integer.parseInt(numeroCedula));
+            cliente.setNombre(nombre);
+            cliente.setApellido(apellido);
+            cliente.setDireccion(direccion);
+            cliente.setCorreo(correo);
 
-        // Redirigir a la página de gestión de clientes
-        response.sendRedirect("gestionCliente.jsp");
+            clienteDAO.guardarCliente(cliente);
+
+            // Redirige a la página de gestión de clientes
+            response.sendRedirect("gestionClientes.jsp");
+        } catch (IllegalArgumentException e) {
+            // Establece el mensaje de error y redirige de nuevo al modal
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("gestionClientes.jsp").forward(request, response);
+        }
     }
 }

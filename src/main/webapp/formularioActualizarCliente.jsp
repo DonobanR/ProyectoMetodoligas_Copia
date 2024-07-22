@@ -1,54 +1,58 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: USUARIO
-  Date: 8/7/2024
-  Time: 0:29
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page import="dao.ClienteDAO" %>
-<%@ page import="entity.Cliente" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Actualizar Cliente</title>
-</head>
-<body>
+<%-- Código existente en gestionClientes.jsp --%>
 
-<%
-    String mensaje = request.getParameter("mensaje");
-    String numeroCedulaStr = request.getParameter("id");
-    int numeroCedula = Integer.parseInt(numeroCedulaStr);
-    ClienteDAO clienteDAO = new ClienteDAO();
-    Cliente cliente = clienteDAO.obtenerClientePorCedula(numeroCedula);
-%>
-<% if ("actualizacionExitosa".equals(mensaje)) { %>
-<div class="alert alert-success">Actualización Exitosa</div>
-<% } else if ("errorActualizacion".equals(mensaje)) { %>
-<div class="alert alert-danger">Error en la Actualización</div>
-<% } %>
+<!-- Modal para agregar cliente -->
+<div id="modalAgregarCliente" class="modal">
+    <div class="modal-content">
 
-<h1>Editar Cliente</h1>
+        <span class="close">&times;</span>
+        <h2>Ingresar Detalles del Cliente</h2>
+        <form id="formAgregarCliente" method="post" action="actualizarCliente">
+            <label for="numero_cedula">Cédula:</label>
+            <input type="text" id="numero_cedula" name="numero_cedula" required>
+            <span id="errorCedula" class="error-message">
+                <% String error = (String) request.getAttribute("error"); %>
+                <%= error != null ? error : "" %>
+            </span>
+            <br>
 
-<% if (cliente != null) { %>
-<form id="actualizarClienteForm" action="actualizarCliente" method="post">
-    <input type="hidden" name="numero_cedula" value="<%= cliente.getId() %>">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" value="<%= cliente.getNombre() %>" required>
-    <label for="apellido">Apellido:</label>
-    <input type="text" id="apellido" name="apellido" value="<%= cliente.getApellido() %>" required>
-    <label for="direccion">Dirección:</label>
-    <input type="text" id="direccion" name="direccion" value="<%= cliente.getDireccion() %>">
-    <label for="correo">Correo:</label>
-    <input type="email" id="correo" name="correo" value="<%= cliente.getCorreo() %>">
-    <button type="submit">Actualizar Cliente</button>
-    <button type="button" onclick="window.location.href='gestionCliente.jsp'">Cancelar</button>
-</form>
-<% } else { %>
-<p>Descuento no encontrado.</p>
-<button type="button" onclick="window.location.href='gestionCliente.jsp'">Volver</button>
-<% } %>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <br>
 
-</body>
-</html>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+            <br>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion">
+            <br>
+
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo">
+            <br>
+
+            <button type="submit">Agregar Cliente</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // JavaScript para manejar el modal
+    var modal = document.getElementById('modalAgregarCliente');
+    var btn = document.getElementById('agregarClienteBtn');
+    var span = document.getElementsByClassName('close')[0];
+
+    btn.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
