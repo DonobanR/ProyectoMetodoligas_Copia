@@ -1,58 +1,102 @@
 package util;
 
-import javax.mail.*;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class EmailSender {
 
-    public static void enviarCorreoElectronico(String correoDestino, byte[] pdfAdjunto) {
-        final String remitenteCorreo = "severeg.facturas@gmail.com";
-        final String password = "SistemaSevereg2024";
+    public static void sendEmailWithAttachment(String to, String subject, String body, byte[] pdfContent) {
+        final String username = "severeg.facturas@gmail.com";
+        final String password = "bqrdfykwczuoggjl";
 
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(remitenteCorreo, password);
-            }
-        });
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(remitenteCorreo));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
-            message.setSubject("[FACTURA] Severeg");
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject(subject);
 
-            MimeBodyPart mensajeParte = new MimeBodyPart();
-            mensajeParte.setText("Adjuntamos su factura en PDF.\n\n"
-                    + "Los pagos del servicio pueden ser realizados únicamente en nuestros canales autorizados.\n"
-                    + "El personal de Netlife no recibe ningún tipo de pago en efectivo o en cuentas personales.\n\n"
-                    + "PARA REQUERIMIENTOS O CONSULTAS DE FACTURACIÓN Y COBRANZA CONTÁCTANOS");
+            // Body part
+            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.setText(body);
 
-            MimeBodyPart adjuntoParte = new MimeBodyPart();
-            adjuntoParte.setContent(pdfAdjunto, "application/pdf");
-            adjuntoParte.setFileName("factura.pdf");
+            // Attachment part
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            DataSource source = new ByteArrayDataSource(pdfContent, "application/pdf");
+            attachmentPart.setDataHandler(new DataHandler(source));
+            attachmentPart.setFileName("factura.pdf");
 
+            // Combine parts
             Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(mensajeParte);
-            multipart.addBodyPart(adjuntoParte);
+            multipart.addBodyPart(mimeBodyPart);
+            multipart.addBodyPart(attachmentPart);
 
             message.setContent(multipart);
 
             Transport.send(message);
+            System.out.println("Correo enviado exitosamente");
 
-            System.out.println("Correo electrónico enviado correctamente a " + correoDestino);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Clase para manejar la fuente de datos del byte array
+    private static class ByteArrayDataSource implements DataSource {
+        private byte[] data;
+        private String type;
+
+        public ByteArrayDataSource(byte[] data, String type) {
+            this.data = data;
+            this.type = type;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(data);
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            throw new IOException("Not Supported");
+        }
+
+        @Override
+        public String getContentType() {
+            return type;
+        }
+
+        @Override
+        public String getName() {
+            return "ByteArrayDataSource";
         }
     }
 }
