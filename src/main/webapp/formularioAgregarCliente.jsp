@@ -1,37 +1,54 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Alexander Tibanta
+  User: USUARIO
   Date: 8/7/2024
-  Time: 0:23
+  Time: 0:29
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.io.PrintWriter" %>
+<%@ page import="dao.ClienteDAO" %>
+<%@ page import="entity.Cliente" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Agregar Clientes</title>
+    <title>Actualizar Cliente</title>
 </head>
 <body>
 
-<h2>Ingresar Detalles del Cliente</h2>
-<form action="agregarCliente" method="post">
-    <label for="numero_cedula">Cédula:</label>
-    <input type="text" id="numero_cedula" name="numero_cedula" required>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
-    <label for="apellido">Apellido:</label>
-    <input type="text" id="apellido" name="apellido" required>
-    <label for="direccion">Dirección:</label>
-    <input type="text" id="direccion" name="direccion">
-    <label for="correo">Correo:</label>
-    <input type="email" id="correo" name="correo">
-    <button type="submit">Agregar Cliente 1111</button>
-</form>
+<%
+    String mensaje = request.getParameter("mensaje");
+    String numeroCedulaStr = request.getParameter("id");
+    int numeroCedula = Integer.parseInt(numeroCedulaStr);
+    ClienteDAO clienteDAO = new ClienteDAO();
+    Cliente cliente = clienteDAO.obtenerClientePorCedula(numeroCedula);
+%>
+<% if ("actualizacionExitosa".equals(mensaje)) { %>
+<div class="alert alert-success">Actualización Exitosa</div>
+<% } else if ("errorActualizacion".equals(mensaje)) { %>
+<div class="alert alert-danger">Error en la Actualización</div>
+<% } %>
 
-<br>
-<a href="gestionClientes.jsp">Volver a la gestión de clientes</a>
+<h1>Editar Cliente</h1>
+
+<% if (cliente != null) { %>
+<form id="actualizarClienteForm" action="actualizarCliente" method="post">
+    <input type="hidden" name="numero_cedula" value="<%= cliente.getId() %>">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" value="<%= cliente.getNombre() %>" required>
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido" value="<%= cliente.getApellido() %>" required>
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" value="<%= cliente.getDireccion() %>">
+    <label for="correo">Correo:</label>
+    <input type="email" id="correo" name="correo" value="<%= cliente.getCorreo() %>">
+    <button type="submit">Actualizar Cliente</button>
+    <button type="button" onclick="window.location.href='gestionCliente.jsp'">Cancelar</button>
+</form>
+<% } else { %>
+<p>Descuento no encontrado.</p>
+<button type="button" onclick="window.location.href='gestionCliente.jsp'">Volver</button>
+<% } %>
 
 </body>
 </html>

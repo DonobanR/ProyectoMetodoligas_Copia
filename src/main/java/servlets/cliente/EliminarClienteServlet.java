@@ -8,29 +8,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import comprobration.Comprobations;
 
 @WebServlet("/eliminarCliente")
 public class EliminarClienteServlet extends HttpServlet {
     private ClienteDAO clienteDAO = new ClienteDAO();
+    private Comprobations comprobations = new Comprobations();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener el ID del cliente a eliminar
-        int numeroCedula = Integer.parseInt(request.getParameter("numero_cedula"));
+        String numeroCedula = request.getParameter("numero_cedula");
 
-        // Obtener el cliente de la base de datos
-        Cliente cliente = clienteDAO.obtenerClientePorCedula(numeroCedula);
-        if (cliente != null) {
-            // Eliminar el cliente de la base de datos
-            clienteDAO.eliminarCliente(cliente);
+        try {
+            if (!comprobations.verificarCedulaEcuatoriana(numeroCedula)) {
+                request.setAttribute("error", "La cédula no es válida");
+                request.getRequestDispatcher("formularioEliminarCliente.jsp").forward(request, response);
+                return;
+            }
 
-            // Redirigir a la página de gestión de clientes con un mensaje de éxito
-            response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=eliminacionExitosa");
-        } else {
-            // Redirigir con mensaje de error
-            response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=errorEliminacion");
+            Cliente cliente = clienteDAO.obtenerClientePorCedula(Integer.parseInt(numeroCedula));
+            if (cliente != null) {
+                clienteDAO.eliminarCliente(cliente);
+                response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=eliminacionExitosa");
+            } else {
+                response.sendRedirect("formularioEliminarCliente.jsp?id=" + numeroCedula + "&mensaje=errorEliminacion");
+            }
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("formularioEliminarCliente.jsp").forward(request, response);
         }
-
-
     }
 }

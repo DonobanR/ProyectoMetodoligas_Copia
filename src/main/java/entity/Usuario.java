@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Usuario {
     @Id
     @Column(name = "numero_cedula", nullable = false)
-    private Integer numeroCedula;
+    private String numeroCedula;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -32,12 +32,12 @@ public class Usuario {
     @Column(name = "tipo_usuario", insertable = false, updatable = false)
     private String tipoUsuario;  // Añadir este campo
 
-    public Integer getNumeroCedula() {
+    public String getNumeroCedula() {
         return numeroCedula;
     }
 
     public void setNumeroCedula(String numeroCedula) {
-        this.numeroCedula = Integer.valueOf(numeroCedula);
+        this.numeroCedula = numeroCedula;
     }
 
     public String getNombre() {

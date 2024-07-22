@@ -1,13 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Tibanta Alexander
-  Date: 7/7/2024
-  Time: 10:36
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page import="java.util.List" %>
 <%@ page import="dao.ClienteDAO" %>
 <%@ page import="entity.Cliente" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,7 +32,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
         }
         .modal-content {
@@ -60,6 +52,13 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+        .input-error {
+            border: 1px solid red;
         }
     </style>
 </head>
@@ -84,7 +83,7 @@
 <h2>Clientes Actuales</h2>
 <table id="clientes">
     <tr>
-        <th>Numero C&eacute;dula</th>
+        <th>Numero Cédula</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Dirección</th>
@@ -113,27 +112,39 @@
 <div id="modalAgregarCliente" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2> Ingresar Detalles del Cliente </h2>
-        <form action="agregarCliente" method="post">
+        <h2>Ingresar Detalles del Cliente</h2>
+        <form id="formAgregarCliente" method="post" action="actualizarCliente">
             <label for="numero_cedula">Cédula:</label>
             <input type="text" id="numero_cedula" name="numero_cedula" required>
+            <span id="errorCedula" class="error-message">
+                <% String error = (String) request.getAttribute("error"); %>
+                <%= error != null ? error : "" %>
+            </span>
+            <br>
+
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
+            <br>
+
             <label for="apellido">Apellido:</label>
             <input type="text" id="apellido" name="apellido" required>
+            <br>
+
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion">
+            <br>
+
             <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" readonly>
+            <input type="email" id="correo" name="correo">
+            <br>
+
             <button type="submit">Agregar Cliente</button>
         </form>
     </div>
 </div>
 
 <button id="actualizarClienteBtn">Actualizar Cliente</button>
-
 <button id="eliminarClienteBtn">Eliminar Cliente</button>
-
 <button type="button" onclick="window.location.href='inicio.jsp'">Volver</button>
 
 <script>
@@ -163,9 +174,7 @@
         return fetch('verificarCorreo?correo=' + correo)
             .then(response => response.json());
     }
-</script>
 
-<script>
     document.getElementById('searchForm').addEventListener('submit', function (event){
         event.preventDefault();
         var filtro = document.getElementById('filtro').value;
@@ -174,10 +183,10 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                var table = document.getElementById('clientes')
+                var table = document.getElementById('clientes');
                 table.innerHTML = '';
                 var headerRow = table.insertRow();
-                var headers = ['Numero C&eacute;dula', 'Nombre', 'Apellido', 'Direccion', 'Correo']
+                var headers = ['Numero Cédula', 'Nombre', 'Apellido', 'Dirección', 'Correo'];
                 headers.forEach(headerText => {
                     var headerCell = document.createElement('th');
                     headerCell.textContent = headerText;
@@ -190,50 +199,37 @@
                     row.insertCell(2).textContent = cliente.apellido;
                     row.insertCell(3).textContent = cliente.direccion;
                     row.insertCell(4).textContent = cliente.correo;
-
                 });
             });
     });
 
-
     var modal = document.getElementById('modalAgregarCliente');
     var btn = document.getElementById('agregarClienteBtn');
     var span = document.getElementsByClassName('close')[0];
+    var btnActualizar = document.getElementById('actualizarClienteBtn');
+    var btnEliminar = document.getElementById('eliminarClienteBtn');
 
     btn.onclick = function() {
         modal.style.display = 'block';
     }
-
     span.onclick = function() {
         modal.style.display = 'none';
     }
-
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = 'none';
         }
     }
-</script>
-
-<script>
-    var modalAgregar = document.getElementById('modalAgregarCliente');
-    var btnAgregar = document.getElementById('agregarClienteBtn');
-    var btnActualizar = document.getElementById('actualizarClienteBtn');
-    var btnEliminar = document.getElementById('eliminarClienteBtn');
-
-    btnAgregar.onclick = function() {
-        modalAgregar.style.display = 'block';
-    }
 
     btnActualizar.onclick = function() {
-        var id = prompt("Ingrese el Numero de Cedula del cliente que desea actualizar:");
+        var id = prompt("Ingrese el ID del cliente que desea actualizar:");
         if (id) {
             window.location.href = 'formularioActualizarCliente.jsp?id=' + id;
         }
     }
 
     btnEliminar.onclick = function() {
-        var id = prompt("Ingrese el Numero de Cedula del cliente que desea eliminar:");
+        var id = prompt("Ingrese el ID del cliente que desea eliminar:");
         if (id) {
             window.location.href = 'formularioEliminarCliente.jsp?id=' + id;
         }
