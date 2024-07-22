@@ -34,6 +34,7 @@ entity\Venta.class
 servlets\inventario\producto\AgregarProductoServlet.class
 util\EmailSender.class
 entity\Cajero.class
+util\EmailSender$ByteArrayDataSource.class
 incrementos\VerificarPagoResponse.class
 execute\TestVentaDAO.class
 servlets\inventario\producto\EliminarProductoServlet.class
