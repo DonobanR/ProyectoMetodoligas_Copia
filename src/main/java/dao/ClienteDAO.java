@@ -48,13 +48,23 @@ public class ClienteDAO {
     }
 
     // Método para eliminar un cliente de la base de datos
-    public void eliminarCliente(Cliente cliente) {
+// Método para eliminar un cliente de la base de datos
+    public boolean eliminarCliente(int id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
+        boolean eliminado = false;
 
         try {
             transaction = session.beginTransaction();
-            session.delete(cliente);
+
+            // Buscar el cliente por ID
+            Cliente cliente = session.get(Cliente.class, id);
+            if (cliente != null) {
+                // Eliminar el cliente si existe
+                session.delete(cliente);
+                eliminado = true;
+            }
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -64,7 +74,11 @@ public class ClienteDAO {
         } finally {
             session.close();
         }
+
+        return eliminado;
     }
+
+
 
     // Método para obtener todos los clientes de la base de datos
     public List<Cliente> obtenerClientes() {
@@ -77,12 +91,19 @@ public class ClienteDAO {
     // Método para buscar descuentos en la base de datos
     public List<Cliente> buscarCliente(String filtro, String terminoBusqueda) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Validación básica para el filtro
+            if (!"id".equals(filtro) && !"nombre".equals(filtro) && !"apellido".equals(filtro) && !"correo".equals(filtro)) {
+                throw new IllegalArgumentException("Filtro no válido");
+            }
+            System.out.println("empieza con FROM Cliente WHERE " + filtro + " LIKE :termino");
             String hql = "FROM Cliente WHERE " + filtro + " LIKE :termino";
             Query<Cliente> query = session.createQuery(hql, Cliente.class);
+            System.out.println("termino de busqueda: " + terminoBusqueda);
             query.setParameter("termino", "%" + terminoBusqueda + "%");
             return query.list();
         }
     }
+
 
     // Método para obtener un cliente por numero_cedula
     public Cliente obtenerClientePorCedula(Integer numeroCedula) {

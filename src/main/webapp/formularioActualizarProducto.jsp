@@ -14,6 +14,7 @@
     ProductoDAO productoDAO = new ProductoDAO();
     Producto producto = productoDAO.obtenerProductoPorId(id);
 %>
+
 <% if ("actualizacionExitosa".equals(mensaje)) { %>
 <div class="alert alert-success">Actualización Exitosa</div>
 <% } else if ("errorActualizacion".equals(mensaje)) { %>

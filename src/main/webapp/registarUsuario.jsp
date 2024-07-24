@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +31,17 @@
         .notification button:hover {
             background-color: #f1f1f1;
         }
+
+        /* Estilo para el mensaje de error y éxito de cédula */
+        .error-message, .success-message {
+            font-size: 0.875rem; /* Tamaño de fuente pequeño */
+        }
+        .error-message {
+            color: red;
+        }
+        .success-message {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -39,7 +50,7 @@
         <div class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
             <div class="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
                 <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">Registrate al Sistema</h2>
-                <p class="mt-2 text-base text-gray-600">¿Ya tienes una cuenta? <a href="iniciarSesion.jsp" title="" class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 hover:underline focus:text-blue-700">Iniciar Sesi&oacute;n</a></p>
+                <p class="mt-2 text-base text-gray-600">¿Ya tienes una cuenta? <a href="iniciarSesion.jsp" class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 hover:underline focus:text-blue-700">Iniciar Sesi&oacute;n</a></p>
 
                 <form action="registro" method="POST" class="mt-8">
                     <div class="space-y-5">
@@ -73,12 +84,18 @@
                             <label for="numeroCedula" class="text-base font-medium text-gray-900"> Numero de C&eacute;dula </label>
                             <div class="mt-2.5">
                                 <input
-                                        type="number"
+                                        type="text"
                                         name="numeroCedula"
                                         id="numeroCedula"
                                         placeholder="Ingrese su n&uacute;mero de c&eacute;dula"
                                         class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                        oninput="validarCedula()"
+                                        maxlength="10"
+                                        pattern="\d*"
+                                        title="Ingrese solo números"
+                                        aria-describedby="mensajeCedula"
                                 />
+                                <p id="mensajeCedula" class="error-message"></p>
                             </div>
                         </div>
 
@@ -145,7 +162,7 @@
                         </div>
 
                         <div>
-                            <button type="submit" class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
+                            <button type="submit" id="registrarButton" class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700" disabled>
                                 Registrarse
                             </button>
                         </div>
@@ -171,22 +188,54 @@
     </div>
 </section>
 
-<!-- Notificación de éxito -->
-<div id="successNotification" class="notification">
-    <p>¡Registro exitoso!</p>
-    <button onclick="redirectToLogin()">Ir a Inicio de Sesión</button>
-</div>
-
 <script>
-    function redirectToLogin() {
-        window.location.href = 'iniciarSesion.jsp';
-    }
+    function validarCedula() {
+        var cedulaInput = document.getElementById('numeroCedula');
+        var cedula = cedulaInput.value;
+        var mensaje = document.getElementById('mensajeCedula');
+        var botonRegistro = document.getElementById('registrarButton');
 
-    // Notificación si se ha registrado correctamente
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('success') === 'true') {
-            document.getElementById('successNotification').style.display = 'block';
+        // Permitir solo números
+        cedulaInput.value = cedula.replace(/[^0-9]/g, '');
+
+        // Validar longitud de la cédula
+        if (cedula.length > 10) {
+            mensaje.textContent = 'El número de cédula no debe exceder los 10 caracteres.';
+            mensaje.className = 'error-message';
+            botonRegistro.disabled = true;
+        } else if (cedula.length < 10 && cedula.length > 0) {
+            mensaje.textContent = 'El número de cédula debe tener exactamente 10 caracteres.';
+            mensaje.className = 'error-message';
+            botonRegistro.disabled = true;
+        } else if (cedula.length === 10) {
+            // Realizar la solicitud AJAX para verificar la cédula
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'verificarCedula', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.valid) {
+                            mensaje.textContent = 'El número de cédula es válido.';
+                            mensaje.className = 'success-message';
+                            botonRegistro.disabled = false;
+                        } else {
+                            mensaje.textContent = 'El número de cédula no es válido.';
+                            mensaje.className = 'error-message';
+                            botonRegistro.disabled = true;
+                        }
+                    } else {
+                        mensaje.textContent = 'Error al verificar el número de cédula.';
+                        mensaje.className = 'error-message';
+                        botonRegistro.disabled = true;
+                    }
+                }
+            };
+            xhr.send('numero_cedula=' + encodeURIComponent(cedula));
+        } else {
+            mensaje.textContent = '';
+            botonRegistro.disabled = true;
         }
     }
 </script>

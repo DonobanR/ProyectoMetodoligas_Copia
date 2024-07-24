@@ -1,7 +1,6 @@
 package servlets.usuario;
 
 import dao.UsuarioDAO;
-
 import entity.Administradoresinventario;
 import entity.Cajero;
 import entity.Usuario;
@@ -12,19 +11,32 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import comprobration.Comprobations;
 
 @WebServlet("/registro")
 public class RegistroServlet extends HttpServlet {
+    private Comprobations comprobations = new Comprobations();
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Recoger parámetros del formulario
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
-        int numeroCedula = Integer.parseInt(request.getParameter("numeroCedula"));
+        String numeroCedulaStr = request.getParameter("numeroCedula");
         String direccion = request.getParameter("direccion");
         String correo = request.getParameter("correo");
         String usuario = request.getParameter("usuario");
         String contrasena = request.getParameter("contrasena");
         String tipoUsuario = request.getParameter("tipoUsuario");
+
+        // Validar número de cédula
+        boolean esValidoCedula = comprobations.verificarCedulaEcuatoriana(numeroCedulaStr);
+        if (!esValidoCedula) {
+            response.sendRedirect("registarUsuario.jsp?error=Número de cédula inválido");
+            return;
+        }
+
+        // Convertir número de cédula a entero
+        int numeroCedula = Integer.parseInt(numeroCedulaStr);
 
         // Hash de la contraseña
         String contrasenaHash = PasswordHasher.hashPassword(contrasena);
@@ -44,7 +56,7 @@ public class RegistroServlet extends HttpServlet {
         // Configurar los valores del nuevo usuario
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setApellido(apellido);
-        nuevoUsuario.setNumeroCedula(String.valueOf(numeroCedula));
+        nuevoUsuario.setNumeroCedula(numeroCedulaStr);
         nuevoUsuario.setDireccion(direccion);
         nuevoUsuario.setCorreo(correo);
         nuevoUsuario.setUsuario(usuario);

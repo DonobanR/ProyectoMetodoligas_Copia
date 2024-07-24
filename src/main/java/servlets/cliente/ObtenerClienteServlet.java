@@ -8,10 +8,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
+import com.google.gson.Gson;
 
-@WebServlet("/obtenerCliente")
+@WebServlet("/buscarCliente")
 public class ObtenerClienteServlet extends HttpServlet {
 
     private final ClienteDAO clienteDAO = new ClienteDAO();
@@ -19,28 +22,24 @@ public class ObtenerClienteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        String numeroCedula = req.getParameter("numeroCedula");
+        String filtro = req.getParameter("filtro");
+        String terminoBusqueda = req.getParameter("terminoBusqueda");
 
         try {
-            if (numeroCedula != null && comprobations.verificarCedulaEcuatoriana(numeroCedula)) {
-                Cliente cliente = clienteDAO.obtenerClientePorCedula(Integer.parseInt(numeroCedula));
-
-                if (cliente == null) {
-                    response.getWriter().write("<p style='color: red;'>Cliente no encontrado.</p>");
-                    return;
-                }
-
-                StringBuilder clienteHtml = new StringBuilder();
-                clienteHtml.append("<h2>Datos del Cliente</h2>");
-                clienteHtml.append("<p><strong>Cédula:</strong> ").append(cliente.getId()).append("</p>");
-                clienteHtml.append("<p><strong>Nombre:</strong> ").append(cliente.getNombre()).append("</p>");
-                clienteHtml.append("<p><strong>Apellido:</strong> ").append(cliente.getApellido()).append("</p>");
-                clienteHtml.append("<p><strong>Dirección:</strong> ").append(cliente.getDireccion()).append("</p>");
-                clienteHtml.append("<p><strong>Correo:</strong> ").append(cliente.getCorreo()).append("</p>");
-                response.getWriter().write(clienteHtml.toString());
+            List<Cliente> clientes;
+            if (filtro != null && terminoBusqueda != null) {
+                clientes = clienteDAO.buscarCliente(filtro, terminoBusqueda);
+            } else {
+                clientes = clienteDAO.obtenerClientes();
             }
-        } catch (IllegalArgumentException e) {
-            response.getWriter().write("<p style='color: red;'>" + e.getMessage() + "</p>");
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Gson gson = new Gson();
+            response.getWriter().write(gson.toJson(clientes));
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
 }

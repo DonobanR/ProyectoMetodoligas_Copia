@@ -22,43 +22,15 @@
         th {
             background-color: #f2f2f2;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+
+        .message {
+            color: green;
+            font-size: 0.9em;
         }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+
         .error-message {
             color: red;
             font-size: 0.9em;
-        }
-        .input-error {
-            border: 1px solid red;
         }
     </style>
 </head>
@@ -66,11 +38,34 @@
 
 <h1>Gestión de Clientes</h1>
 
+<%
+    String mensaje = request.getParameter("mensaje");
+    if (mensaje != null) {
+        if ("eliminacionExitosa".equals(mensaje)) {
+%>
+<p class="message">Cliente eliminado exitosamente.</p>
+<%
+} else if ("errorClienteNoEncontrado".equals(mensaje)) {
+%>
+<p class="error-message">No se encontró el cliente con el número de cédula proporcionado.</p>
+<%
+} else if ("errorNumeroCedula".equals(mensaje)) {
+%>
+<p class="error-message">El número de cédula no es válido.</p>
+<%
+} else if ("numeroCedulaFaltante".equals(mensaje)) {
+%>
+<p class="error-message">El número de cédula no fue proporcionado.</p>
+<%
+        }
+    }
+%>
+
 <h2>Buscar Cliente</h2>
 <form id="searchForm">
     <label for="filtro">Filtrar por:</label>
     <select id="filtro" name="filtro">
-        <option value="numero_cedula">Número de Cédula</option>
+        <option value="id">Número de Cédula</option>
         <option value="nombre">Nombre</option>
         <option value="apellido">Apellido</option>
         <option value="correo">Correo</option>
@@ -82,13 +77,17 @@
 
 <h2>Clientes Actuales</h2>
 <table id="clientes">
+    <thead>
     <tr>
         <th>Numero Cédula</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Dirección</th>
         <th>Correo</th>
+        <th>Acciones</th>
     </tr>
+    </thead>
+    <tbody>
     <%
         ClienteDAO clienteDAO = new ClienteDAO();
         List<Cliente> clientes = clienteDAO.obtenerClientes();
@@ -101,139 +100,83 @@
         <td><%= cliente.getApellido() %></td>
         <td><%= cliente.getDireccion() %></td>
         <td><%= cliente.getCorreo() %></td>
+        <td>
+            <a href="formularioActualizarCliente.jsp?id=<%= cliente.getId() %>">Actualizar</a>
+            <a href="#" onclick="eliminarCliente('<%= cliente.getId() %>')">Eliminar</a>
+        </td>
     </tr>
     <% } %>
+    </tbody>
 </table>
 
-<br>
-
-<button id="agregarClienteBtn">Agregar Cliente</button>
-
-<div id="modalAgregarCliente" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Ingresar Detalles del Cliente</h2>
-        <form id="formAgregarCliente" method="post" action="actualizarCliente">
-            <label for="numero_cedula">Cédula:</label>
-            <input type="text" id="numero_cedula" name="numero_cedula" required>
-            <span id="errorCedula" class="error-message">
-                <% String error = (String) request.getAttribute("error"); %>
-                <%= error != null ? error : "" %>
-            </span>
-            <br>
-
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
-            <br>
-
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" required>
-            <br>
-
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion">
-            <br>
-
-            <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo">
-            <br>
-
-            <button type="submit">Agregar Cliente</button>
-        </form>
-    </div>
-</div>
-
-<button id="actualizarClienteBtn">Actualizar Cliente</button>
-<button id="eliminarClienteBtn">Eliminar Cliente</button>
+<!-- Botones para redirigir a las páginas de operaciones -->
+<button onclick="window.location.href='formularioAgregarCliente.jsp'">Agregar Cliente</button>
 <button type="button" onclick="window.location.href='inicio.jsp'">Volver</button>
 
 <script>
-    document.getElementById('nombre').addEventListener('blur', generarCorreo);
-    document.getElementById('apellido').addEventListener('blur', generarCorreo);
+    // Función de validación para entrada numérica
+    function validateNumberInput(input) {
+        let value = input.value.replace(/[^0-9]/g, '');
 
-    function generarCorreo() {
-        var nombre = document.getElementById('nombre').value.toLowerCase();
-        var apellido = document.getElementById('apellido').value.toLowerCase();
-        if (nombre && apellido) {
-            var correo = nombre + '.' + apellido + '@severeg.com';
-            verificarCorreo(correo).then(resultado => {
-                if (resultado.existe) {
-                    var contador = 1;
-                    while (resultado.existe) {
-                        correo = nombre + '.' + apellido + (contador < 10 ? '0' + contador : contador) + '@severeg.com';
-                        contador++;
-                        resultado = verificarCorreo(correo);
-                    }
-                }
-                document.getElementById('correo').value = correo;
-            });
+        // Limita la longitud a 10 dígitos
+        if (value.length > 10) {
+            value = value.substring(0, 10);
         }
+
+        // Actualiza el valor del campo
+        input.value = value;
     }
 
-    function verificarCorreo(correo) {
-        return fetch('verificarCorreo?correo=' + correo)
-            .then(response => response.json());
-    }
-
-    document.getElementById('searchForm').addEventListener('submit', function (event){
+    // Listener para el formulario de búsqueda
+    document.getElementById('searchForm').addEventListener('submit', function(event){
         event.preventDefault();
         var filtro = document.getElementById('filtro').value;
         var terminoBusqueda = document.getElementById('terminoBusqueda').value;
-        var url = 'buscarCliente?filtro=' + filtro + '&terminoBusqueda=' + terminoBusqueda;
+        var url = 'buscarCliente?filtro=' + encodeURIComponent(filtro) + '&terminoBusqueda=' + encodeURIComponent(terminoBusqueda);
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                var table = document.getElementById('clientes');
-                table.innerHTML = '';
-                var headerRow = table.insertRow();
-                var headers = ['Numero Cédula', 'Nombre', 'Apellido', 'Dirección', 'Correo'];
-                headers.forEach(headerText => {
-                    var headerCell = document.createElement('th');
-                    headerCell.textContent = headerText;
-                    headerRow.appendChild(headerCell);
-                });
+                var tableBody = document.querySelector('#clientes tbody');
+                tableBody.innerHTML = ''; // Limpiar contenido anterior
                 data.forEach(cliente => {
-                    var row = table.insertRow();
-                    row.insertCell(0).textContent = cliente.numero_cedula;
+                    var row = tableBody.insertRow();
+                    row.insertCell(0).textContent = cliente.id;
                     row.insertCell(1).textContent = cliente.nombre;
                     row.insertCell(2).textContent = cliente.apellido;
                     row.insertCell(3).textContent = cliente.direccion;
                     row.insertCell(4).textContent = cliente.correo;
+                    var actionsCell = row.insertCell(5);
+                    actionsCell.innerHTML = `
+                        <a href="formularioActualizarCliente.jsp?id=${cliente.id}">Actualizar</a>
+                        <a href="#" onclick="eliminarCliente('${cliente.id}')">Eliminar</a>
+                    `;
                 });
-            });
+            })
+            .catch(error => console.error('Error:', error));
     });
 
-    var modal = document.getElementById('modalAgregarCliente');
-    var btn = document.getElementById('agregarClienteBtn');
-    var span = document.getElementsByClassName('close')[0];
-    var btnActualizar = document.getElementById('actualizarClienteBtn');
-    var btnEliminar = document.getElementById('eliminarClienteBtn');
-
-    btn.onclick = function() {
-        modal.style.display = 'block';
-    }
-    span.onclick = function() {
-        modal.style.display = 'none';
-    }
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
+    // Función para eliminar cliente
+    function eliminarCliente(id) {
+        if (confirm('¿Está seguro de que desea eliminar este cliente?')) {
+            fetch('eliminarCliente?id=' + encodeURIComponent(id), {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = 'gestionCliente.jsp?mensaje=eliminacionExitosa';
+                    } else {
+                        window.location.href = 'gestionCliente.jsp?mensaje=errorClienteNoEncontrado';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    window.location.href = 'gestionCliente.jsp?mensaje=errorNumeroCedula';
+                });
         }
     }
 
-    btnActualizar.onclick = function() {
-        var id = prompt("Ingrese el ID del cliente que desea actualizar:");
-        if (id) {
-            window.location.href = 'formularioActualizarCliente.jsp?id=' + id;
-        }
-    }
-
-    btnEliminar.onclick = function() {
-        var id = prompt("Ingrese el ID del cliente que desea eliminar:");
-        if (id) {
-            window.location.href = 'formularioEliminarCliente.jsp?id=' + id;
-        }
-    }
 </script>
 
 </body>

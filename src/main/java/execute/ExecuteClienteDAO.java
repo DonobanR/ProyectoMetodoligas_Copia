@@ -21,7 +21,7 @@ public class ExecuteClienteDAO {
         clienteDAO.actualizarCliente(clienteExistente);
 
         //Eliminar Cliente Existente
-        Cliente clienteAEliminar = clienteDAO.obtenerClientePorCedula(1234567889);
-        clienteDAO.eliminarCliente(clienteAEliminar);
+        //Cliente clienteAEliminar = clienteDAO.obtenerClientePorCedula(1234567889);
+        //clienteDAO.eliminarCliente(clienteAEliminar);
     }
 }
