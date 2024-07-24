@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import com.itextpdf.text.Image;
+import util.EmailSender;
 
 
 @WebServlet("/guardarVentaB")
@@ -135,8 +136,12 @@ public class GuardarVentaServletB extends HttpServlet {
             // Enviar el PDF en la respuesta
             res.setContentType("application/pdf");
             res.setHeader("Content-Disposition", "attachment; filename=factura.pdf");
+            byte[] pdfBytes = baos.toByteArray();
             res.getOutputStream().write(baos.toByteArray());
             res.getOutputStream().close();
+
+            // Enviar correo electrónico con el PDF adjunto
+            EmailSender.sendEmailWithAttachment(cliente.getCorreo(), "Factura Generada", "Adjunto encontrará su factura generada.", pdfBytes);
 
         } catch (Exception e) {
             e.printStackTrace();
