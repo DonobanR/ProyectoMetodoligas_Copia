@@ -3,7 +3,39 @@
 <head>
     <title>Buscar Cliente y Producto</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .btn-custom {
+            font-weight: bold;
+            border-radius: .375rem;
+        }
+        .btn-efectivo {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-efectivo:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .btn-tarjeta {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-tarjeta:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .table-custom th, .table-custom td {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
     <script>
+
         $(document).ready(function () {
             $('#buscarClienteForm').submit(function (event) {
                 event.preventDefault(); // Prevenir el envío del formulario
@@ -40,25 +72,40 @@
                 });
             });
 
-            function agregarProducto(productoHtml, cantidad) {
-                // Parsear el HTML recibido como cadena para manipularlo como objeto jQuery
-                const $productoHtml = $(productoHtml);
+            $('.metodoPagoBtn').click(function () {
+                const metodoSeleccionado = $(this).data('metodo');
+                if (metodoSeleccionado === 'efectivo') {
+                    const montoTotal = $('#totalGeneral').text();
+                    $.ajax({
+                        url: 'efectivo.jsp',
+                        method: 'GET',
+                        data: { montoTotal: montoTotal },
+                        success: function (response) {
+                            $('#modalContainer').html(response);
+                            $('#confirmarPagoModal').modal('show'); // Mostrar el modal
+                        },
+                        error: function () {
+                            mostrarError('Error al cargar el modal de pago.');
+                        }
+                    });
+                } else if (metodoSeleccionado === 'tarjeta') {
+                    // Agregar redirección o lógica para 'tarjeta' si es necesario
+                }
+            });
 
-                // Buscar si el producto ya está en la tabla
+            function agregarProducto(productoHtml, cantidad) {
+                const $productoHtml = $(productoHtml);
                 const $productoExistente = $('#tablaProductos tbody').find('tr[data-id="' + $productoHtml.data('id') + '"]');
 
                 if ($productoExistente.length > 0) {
-                    // Si el producto ya existe, actualizar la cantidad y el total
                     const cantidadExistente = parseInt($productoExistente.find('.cantidad').text());
                     const nuevaCantidad = cantidadExistente + parseInt(cantidad);
                     $productoExistente.find('.cantidad').text(nuevaCantidad);
 
-                    // Calcular y actualizar el total
                     const precioUnitario = parseFloat($productoExistente.find('.precio').text());
                     const nuevoTotal = precioUnitario * nuevaCantidad;
                     $productoExistente.find('.total').text(nuevoTotal.toFixed(2));
                 } else {
-                    // Si el producto no existe, agregar una nueva fila
                     $productoHtml.find('.cantidad').text(cantidad);
                     const precioUnitario = parseFloat($productoHtml.find('.precio').text());
                     const total = precioUnitario * parseInt(cantidad);
@@ -67,10 +114,7 @@
                     $('#tablaProductos tbody').append($productoHtml);
                 }
 
-                // Calcular el total general
                 calcularTotalGeneral();
-
-                // Limpiar el mensaje de error si lo hay
                 limpiarError();
             }
 
@@ -95,138 +139,143 @@
             function mostrarNotificacion(mensaje) {
                 $('#notificacion').html('<p>' + mensaje + '</p>').fadeIn().delay(3000).fadeOut();
             }
+
+            $('#guardarVenta').prop('disabled', true);
+
+            $(document).on('change', '#confirmarPago', function() {
+                if ($(this).is(':checked')) {
+                    $('#guardarVenta').prop('disabled', false);
+                } else {
+                    $('#guardarVenta').prop('disabled', true);
+                }
+            });
+
+            $(document).on('confirmarPago', function() {
+                $('#guardarVenta').prop('disabled', false);
+            });
+        });
+        function eliminarFila(button) {
+            $(button).closest('tr').remove();
+            calcularTotalGeneral();
+            mostrarNotificacion('Producto eliminado correctamente.');
+        }
+
+        function calcularTotalGeneral() {
+            let totalGeneral = 0;
+            $('#tablaProductos tbody tr').each(function () {
+                const totalProducto = parseFloat($(this).find('.total').text());
+                totalGeneral += totalProducto;
+            });
+
+            $('#totalGeneral').text(totalGeneral.toFixed(2));
+        }
+        $(document).ready(function () {
+            $('#guardarVenta').click(function () {
+                const cliente = {
+                    id: $('#numeroCedula').val(),
+                    // Añadir otros campos del cliente si es necesario
+                };
+
+                const productos = [];
+                $('#tablaProductos tbody tr').each(function () {
+                    const id = $(this).data('id');
+                    const nombre = $(this).find('.nombre').text();
+                    const precio = parseFloat($(this).find('.precio').text());
+                    const cantidad = parseInt($(this).find('.cantidad').text());
+                    productos.push({ id, nombre, precio, stock: cantidad });
+                });
+
+                $.ajax({
+                    url: 'guardarVentaB',
+                    method: 'POST',
+                    data: {
+                        cliente: JSON.stringify(cliente),
+                        productos: JSON.stringify(productos)
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (response) {
+                        const blob = new Blob([response], { type: 'application/pdf' });
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'factura.pdf';
+                        link.click();
+                        mostrarNotificacion('Venta guardada exitosamente.');
+                        $('#tablaProductos tbody').empty();
+                        $('#totalGeneral').text('1.00');
+                    },
+                    error: function () {
+                        mostrarError('Error al guardar la venta.');
+                    }
+                });
+            });
         });
     </script>
-
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
-
 </head>
-<body class="bg-gray-200 p-4">
+<body class="container p-4">
 
-<h1 class="text-2xl font-bold mb-4">Buscar Cliente</h1>
+<h1 class="mb-4">Buscar Cliente</h1>
 <form id="buscarClienteForm" class="mb-4">
-    <label for="numeroCedula" class="mr-2">Número de Cédula:</label>
-    <input type="text" id="numeroCedula" name="numeroCedula" class="border rounded px-2 py-1">
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded ml-2">Buscar Cliente</button>
+    <div class="mb-3">
+        <label for="numeroCedula" class="form-label">Número de Cédula:</label>
+        <input type="text" id="numeroCedula" name="numeroCedula" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar Cliente</button>
 </form>
 
 <div id="resultadoCliente" class="mb-4"></div>
 
-<h1 class="text-2xl font-bold mb-4">Buscar Producto</h1>
+<h1 class="mb-4">Buscar Producto</h1>
 <form id="buscarProductoForm" class="mb-4">
-    <label for="idProducto" class="mr-2">ID del Producto:</label>
-    <input type="text" id="idProducto" name="idProducto" class="border rounded px-2 py-1">
-    <label for="cantidad" class="mr-2">Cantidad:</label>
-    <input type="number" id="cantidad" name="cantidad" min="1" value="1" class="border rounded px-2 py-1 w-20">
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded ml-2">Agregar Producto</button>
+    <div class="mb-3">
+        <label for="idProducto" class="form-label">ID del Producto:</label>
+        <input type="text" id="idProducto" name="idProducto" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" min="1" value="1" class="form-control w-25">
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Producto</button>
 </form>
 
 <div id="mensajeError" class="mb-4"></div>
-<div id="notificacion" style="display: none;" class="mb-4"></div>
+<div id="notificacion" class="mb-4" style="display: none;"></div>
 
 <div id="resultadoProducto" class="mb-4">
-    <table id="tablaProductos" class="table-auto border-collapse border w-full">
+    <table id="tablaProductos" class="table table-striped table-bordered table-custom">
         <thead>
-        <tr class="bg-gray-200">
-            <th class="border px-4 py-2 text-center">ID</th>
-            <th class="border px-4 py-2 text-center">Nombre</th>
-            <th class="border px-4 py-2 text-center">Precio Unitario</th>
-            <th class="border px-4 py-2 text-center">Cantidad</th>
-            <th class="border px-4 py-2 text-center">Total</th>
-            <th class="border px-4 py-2 text-center">Acciones</th>
+        <tr class="table-secondary">
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="4" class="border px-4 py-2 text-center"><strong>Total General</strong></td>
-            <td id="totalGeneral" class="border px-4 py-2 text-center">0.00</td>
-            <td class="border px-4 py-2 text-center"></td>
+            <td colspan="4" class="table-primary"><strong>Total General</strong></td>
+            <td id="totalGeneral" class="table-primary">0.00</td>
+            <td></td>
         </tr>
         </tfoot>
     </table>
 </div>
 
-<br>
+<!-- Botones para Métodos de Pago -->
+<div class="mb-4">
+    <button id="efectivoBtn" class="btn btn-custom btn-efectivo metodoPagoBtn" data-metodo="efectivo">Efectivo</button>
+    <button id="tarjetaBtn" class="btn btn-custom btn-tarjeta metodoPagoBtn" data-metodo="tarjeta">Tarjeta</button>
+</div>
 
-<button id="guardarVenta" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Guardar Venta</button>
+<button id="guardarVenta" class="btn btn-secondary mt-4" disabled>Guardar Venta</button>
 
-
-<script>
-    function eliminarFila(button) {
-        $(button).closest('tr').remove();
-        calcularTotalGeneral();
-        mostrarNotificacion('Producto eliminado correctamente.');
-    }
-
-    function calcularTotalGeneral() {
-        let totalGeneral = 0;
-        $('#tablaProductos tbody tr').each(function () {
-            const totalProducto = parseFloat($(this).find('.total').text());
-            totalGeneral += totalProducto;
-        });
-
-        $('#totalGeneral').text(totalGeneral.toFixed(2));
-    }
-</script>
-
-<script>
-    function mostrarNotificacion(mensaje) {
-        $('#notificacion').html('<p>' + mensaje + '</p>').fadeIn().delay(3000).fadeOut();
-    }
-
-    function mostrarError(mensaje) {
-        $('#mensajeError').html('<p style="color: red;">' + mensaje + '</p>');
-    }
-
-    function limpiarError() {
-        $('#mensajeError').empty();
-    }
-
-    $(document).ready(function () {
-        $('#guardarVenta').click(function () {
-            const cliente = {
-                id: $('#numeroCedula').val(),
-                // Añadir otros campos del cliente si es necesario
-            };
-
-            const productos = [];
-            $('#tablaProductos tbody tr').each(function () {
-                const id = $(this).data('id');
-                const nombre = $(this).find('.nombre').text();
-                const precio = parseFloat($(this).find('.precio').text());
-                const cantidad = parseInt($(this).find('.cantidad').text());
-                productos.push({ id, nombre, precio, stock: cantidad });
-            });
-
-            $.ajax({
-                url: 'guardarVentaB',
-                method: 'POST',
-                data: {
-                    cliente: JSON.stringify(cliente),
-                    productos: JSON.stringify(productos)
-                },
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function (response) {
-                    const blob = new Blob([response], { type: 'application/pdf' });
-                    const link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = 'factura.pdf';
-                    link.click();
-                    mostrarNotificacion('Venta guardada exitosamente.');
-                    $('#tablaProductos tbody').empty();
-                    $('#totalGeneral').text('1.00');
-                },
-                error: function () {
-                    mostrarError('Error al guardar la venta.');
-                }
-            });
-        });
-    });
-</script>
+<!-- Contenedor para el modal -->
+<div id="modalContainer"></div>
 
 </body>
 </html>

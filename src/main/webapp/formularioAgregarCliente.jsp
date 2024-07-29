@@ -11,6 +11,7 @@
             console.log("Número de cédula en validateCedula: [" + numeroCedula + "]");
 
             const errorElement = document.getElementById('errorCedula');
+            const submitButton = document.getElementById('submitButton');
 
             if (numeroCedula.length === 10) {
                 // Codificar el valor de la cédula
@@ -32,12 +33,21 @@
                     .then(data => {
                         console.log("Respuesta del servidor: ", data);
                         console.log("Cédula válida: " + data.valid);
+                        console.log("Cédula existe: " + data.exists);
                         if (data.valid) {
-                            errorElement.innerText = 'Cédula válida.';
-                            errorElement.style.color = 'green';
+                            if (data.exists) {
+                                errorElement.innerText = 'La cédula ya existe en la base de datos.';
+                                errorElement.style.color = 'red';
+                                submitButton.disabled = true; // Deshabilitar el botón si la cédula existe
+                            } else {
+                                errorElement.innerText = 'Cédula válida.';
+                                errorElement.style.color = 'green';
+                                submitButton.disabled = false; // Habilitar el botón si la cédula es válida y no existe
+                            }
                         } else {
                             errorElement.innerText = 'Cédula inválida.';
                             errorElement.style.color = 'red';
+                            submitButton.disabled = true; // Deshabilitar el botón si la cédula es inválida
                         }
                     })
                     .catch(error => {
@@ -46,6 +56,7 @@
             } else {
                 errorElement.innerText = 'La cédula debe tener exactamente 10 dígitos.';
                 errorElement.style.color = 'red';
+                submitButton.disabled = true; // Deshabilitar el botón si la cédula no tiene 10 dígitos
             }
         }
 
@@ -99,12 +110,6 @@
                 correo.style.borderColor = '';
             }
 
-            // Validar cédula
-            const cedula = document.getElementById('cedula').value;
-            if (cedula.length === 10) {
-                validateCedula();
-            }
-
             if (!isValid) {
                 errorElement.innerText = 'Por favor, corrija los errores en el formulario.';
                 errorElement.style.color = 'red';
@@ -122,6 +127,14 @@
                 const field = document.getElementById(fieldId);
                 field.addEventListener('input', validateField);
             });
+
+            // Deshabilitar el botón de envío inicialmente
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+
+            // Agregar el evento de validación de cédula
+            const cedulaField = document.getElementById('cedula');
+            cedulaField.addEventListener('input', validateCedula);
         }
 
         document.addEventListener('DOMContentLoaded', initValidation);
@@ -151,7 +164,7 @@
     <input type="email" id="correo" name="correo" required />
     <br><br>
 
-    <button type="submit">Agregar Cliente</button>
+    <button type="submit" id="submitButton">Agregar Cliente</button>
     <button type="button" onclick="window.location.href='gestionCliente.jsp'">Regresar a Gestión de Clientes</button>
     <span id="errorForm"></span>
 </form>
