@@ -4,6 +4,7 @@
     <title>Buscar Cliente y Producto</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -36,6 +37,14 @@
     </style>
     <script>
         $(document).ready(function () {
+            const encryptionKey = CryptoJS.enc.Utf8.parse('mysecretkey12345');  // Clave de 16 bytes
+
+            function encryptData(data) {
+                return CryptoJS.AES.encrypt(JSON.stringify(data), encryptionKey, {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                }).toString();
+            }
             $('#buscarClienteForm').submit(function (event) {
                 event.preventDefault(); // Prevenir el envío del formulario
                 const numeroCedula = $('#numeroCedula').val();
@@ -145,18 +154,16 @@
                 };
 
                 // Aquí puedes cifrar los datos de la tarjeta antes de enviarlos
-                // const datosCifrados = encryptData(datosTarjeta);
+                const datosCifrados = encryptData(datosTarjeta);
 
                 $.ajax({
                     url: 'http://localhost:5000/procesarPagoTarjeta',
                     method: 'POST',
-                    data: JSON.stringify(datosTarjeta), // Usa datosCifrados si los cifraste
+                    data: JSON.stringify({ encryptedData: datosCifrados }),
                     contentType: 'application/json',
                     success: function (response) {
                         if (response.status === 'success') {
                             mostrarNotificacion('Pago procesado exitosamente.');
-
-                            // Guardar la venta en la base de datos
                             guardarVenta();
                         } else {
                             mostrarError('Error al procesar el pago.');
@@ -168,6 +175,7 @@
                     }
                 });
             });
+
             function guardarVenta() {
                 const cliente = {
                     id: $('#numeroCedula').val(),
