@@ -89,9 +89,121 @@
                         }
                     });
                 } else if (metodoSeleccionado === 'tarjeta') {
-                    // Agregar redirección o lógica para 'tarjeta' si es necesario
+                    $('#pagoTarjetaModal').modal('show');
                 }
             });
+            // Función de validación de la tarjeta
+            function validarTarjeta(numeroTarjeta) {
+                const regex = /^\d{12}$/;
+                return regex.test(numeroTarjeta);
+            }
+
+            // Función de validación de la fecha de expiración
+            function validarFechaExpiracion(fechaExpiracion) {
+                const regex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+                return regex.test(fechaExpiracion);
+            }
+
+            // Función de validación del CVV
+            function validarCVV(cvv) {
+                const regex = /^\d{3}$/;
+                return regex.test(cvv);
+            }
+
+            // Manejar el envío del formulario de pago con tarjeta
+            $('#pagoTarjetaForm').submit(function (event) {
+                event.preventDefault(); // Prevenir el envío del formulario
+
+                const numeroTarjeta = $('#numeroTarjeta').val();
+                const nombreTitular = $('#nombreTitular').val();
+                const fechaExpiracion = $('#fechaExpiracion').val();
+                const cvv = $('#cvv').val();
+
+                // Validaciones
+                if (!validarTarjeta(numeroTarjeta)) {
+                    mostrarError('El número de la tarjeta debe tener 12 dígitos.');
+                    return;
+                }
+                if (!validarFechaExpiracion(fechaExpiracion)) {
+                    mostrarError('La fecha de expiración debe tener el formato MM/AA.');
+                    return;
+                }
+                if (!validarCVV(cvv)) {
+                    mostrarError('El CVV debe tener 3 dígitos.');
+                    return;
+                }
+
+                const datosTarjeta = {
+                    numeroTarjeta: numeroTarjeta,
+                    nombreTitular: nombreTitular,
+                    fechaExpiracion: fechaExpiracion,
+                    cvv: cvv
+                };
+
+                // Aquí puedes cifrar los datos de la tarjeta antes de enviarlos
+                // const datosCifrados = encryptData(datosTarjeta);
+
+                $.ajax({
+                    url: 'http://localhost:5000/procesarPagoTarjeta',
+                    method: 'POST',
+                    data: JSON.stringify(datosTarjeta), // Usa datosCifrados si los cifraste
+                    contentType: 'application/json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            mostrarNotificacion('Pago procesado exitosamente.');
+
+                            // Guardar la venta en la base de datos
+                            guardarVenta();
+                        } else {
+                            mostrarError('Error al procesar el pago.');
+                        }
+                        $('#pagoTarjetaModal').modal('hide');
+                    },
+                    error: function () {
+                        mostrarError('Error al procesar el pago.');
+                    }
+                });
+            });
+            function guardarVenta() {
+                const cliente = {
+                    id: $('#numeroCedula').val(),
+                    // Añadir otros campos del cliente si es necesario
+                };
+
+                const productos = [];
+                $('#tablaProductos tbody tr').each(function () {
+                    const id = $(this).data('id');
+                    const nombre = $(this).find('.nombre').text();
+                    const precio = parseFloat($(this).find('.precio').text());
+                    const cantidad = parseInt($(this).find('.cantidad').text());
+                    productos.push({ id, nombre, precio, stock: cantidad });
+                });
+
+                $.ajax({
+                    url: 'guardarVentaB',
+                    method: 'POST',
+                    data: {
+                        cliente: JSON.stringify(cliente),
+                        productos: JSON.stringify(productos)
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (response) {
+                        const blob = new Blob([response], { type: 'application/pdf' });
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'factura.pdf';
+                        link.click();
+                        mostrarNotificacion('Venta guardada exitosamente.');
+                        $('#tablaProductos tbody').empty();
+                        $('#totalGeneral').text('0.00');
+                    },
+                    error: function () {
+                        mostrarError('Error al guardar la venta.');
+                    }
+                });
+            }
 
             function agregarProducto(productoHtml, cantidad) {
                 const $productoHtml = $(productoHtml);
@@ -171,44 +283,7 @@
         }
         $(document).ready(function () {
             $('#guardarVenta').click(function () {
-                const cliente = {
-                    id: $('#numeroCedula').val(),
-                    // Añadir otros campos del cliente si es necesario
-                };
-
-                const productos = [];
-                $('#tablaProductos tbody tr').each(function () {
-                    const id = $(this).data('id');
-                    const nombre = $(this).find('.nombre').text();
-                    const precio = parseFloat($(this).find('.precio').text());
-                    const cantidad = parseInt($(this).find('.cantidad').text());
-                    productos.push({ id, nombre, precio, stock: cantidad });
-                });
-
-                $.ajax({
-                    url: 'guardarVentaB',
-                    method: 'POST',
-                    data: {
-                        cliente: JSON.stringify(cliente),
-                        productos: JSON.stringify(productos)
-                    },
-                    xhrFields: {
-                        responseType: 'blob'
-                    },
-                    success: function (response) {
-                        const blob = new Blob([response], { type: 'application/pdf' });
-                        const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'factura.pdf';
-                        link.click();
-                        mostrarNotificacion('Venta guardada exitosamente.');
-                        $('#tablaProductos tbody').empty();
-                        $('#totalGeneral').text('1.00');
-                    },
-                    error: function () {
-                        mostrarError('Error al guardar la venta.');
-                    }
-                });
+                guardarVenta();
             });
         });
     </script>
@@ -275,7 +350,41 @@
 <button id="guardarVenta" class="btn btn-secondary mt-4" disabled>Guardar Venta</button>
 
 <!-- Contenedor para el modal -->
-<div id="modalContainer"></div>
+<div id="modalContainer">
+    <!-- Modal para Pago con Tarjeta -->
+    <div class="modal fade" id="pagoTarjetaModal" tabindex="-1" aria-labelledby="pagoTarjetaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pagoTarjetaModalLabel">Pago con Tarjeta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="pagoTarjetaForm">
+                        <div class="mb-3">
+                            <label for="numeroTarjeta" class="form-label">Número de Tarjeta:</label>
+                            <input type="text" id="numeroTarjeta" name="numeroTarjeta" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombreTitular" class="form-label">Nombre del Titular:</label>
+                            <input type="text" id="nombreTitular" name="nombreTitular" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaExpiracion" class="form-label">Fecha de Expiración:</label>
+                            <input type="text" id="fechaExpiracion" name="fechaExpiracion" class="form-control" placeholder="MM/AA" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV:</label>
+                            <input type="text" id="cvv" name="cvv" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Pagar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>
