@@ -35,7 +35,6 @@
         }
     </style>
     <script>
-
         $(document).ready(function () {
             $('#buscarClienteForm').submit(function (event) {
                 event.preventDefault(); // Prevenir el envío del formulario
@@ -73,6 +72,11 @@
             });
 
             $('.metodoPagoBtn').click(function () {
+                if ($('#totalGeneral').text() === '0.00') {
+                    mostrarError('No hay productos en la tabla.');
+                    return;
+                }
+
                 const metodoSeleccionado = $(this).data('metodo');
                 if (metodoSeleccionado === 'efectivo') {
                     const montoTotal = $('#totalGeneral').text();
@@ -241,11 +245,11 @@
             }
 
             function mostrarError(mensaje) {
-                $('#mensajeError').html('<p style="color: red;">' + mensaje + '</p>');
+                $('#mensajeError').text(mensaje).show();
             }
 
             function limpiarError() {
-                $('#mensajeError').empty();
+                $('#mensajeError').empty().hide();
             }
 
             function mostrarNotificacion(mensaje) {
@@ -262,14 +266,41 @@
                 }
             });
 
+            $('#guardarVenta').click(function () {
+                guardarVenta();
+
+            });
+
+            // Nueva lógica para mostrar notificación de pago exitoso y desactivar botones
             $(document).on('confirmarPago', function() {
                 $('#guardarVenta').prop('disabled', false);
+                $('#mensajePago').text('Pago confirmado exitosamente.');
+                $('#notificacionPago').show(); // Mostrar la notificación
+                $('#efectivoBtn').prop('disabled', true);
+                $('#tarjetaBtn').prop('disabled', true);
             });
+
         });
+
         function eliminarFila(button) {
             $(button).closest('tr').remove();
             calcularTotalGeneral();
             mostrarNotificacion('Producto eliminado correctamente.');
+        }
+
+        function validarDatos() {
+            const clienteId = $('#numeroCedula').val();
+            const productos = $('#tablaProductos tbody tr').length;
+
+            if (!clienteId) {
+                return 'El cliente debe ser seleccionado.';
+            }
+
+            if (productos === 0) {
+                return 'Debe agregar al menos un producto a la venta.';
+            }
+
+            return null;
         }
 
         function calcularTotalGeneral() {
@@ -281,11 +312,6 @@
 
             $('#totalGeneral').text(totalGeneral.toFixed(2));
         }
-        $(document).ready(function () {
-            $('#guardarVenta').click(function () {
-                guardarVenta();
-            });
-        });
     </script>
 </head>
 <body class="container p-4">
@@ -304,50 +330,40 @@
 <h1 class="mb-4">Buscar Producto</h1>
 <form id="buscarProductoForm" class="mb-4">
     <div class="mb-3">
-        <label for="idProducto" class="form-label">ID del Producto:</label>
+        <label for="idProducto" class="form-label">ID de Producto:</label>
         <input type="text" id="idProducto" name="idProducto" class="form-control">
     </div>
     <div class="mb-3">
         <label for="cantidad" class="form-label">Cantidad:</label>
-        <input type="number" id="cantidad" name="cantidad" min="1" value="1" class="form-control w-25">
+        <input type="number" id="cantidad" name="cantidad" class="form-control">
     </div>
-    <button type="submit" class="btn btn-primary">Agregar Producto</button>
+    <button type="submit" class="btn btn-primary">Buscar Producto</button>
 </form>
 
-<div id="mensajeError" class="mb-4"></div>
-<div id="notificacion" class="mb-4" style="display: none;"></div>
+<h2 class="mb-4">Productos</h2>
+<div id="notificacion" style="display: none; color: green;"></div>
+<table class="table table-bordered table-custom" id="tablaProductos">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Marca</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
-<div id="resultadoProducto" class="mb-4">
-    <table id="tablaProductos" class="table table-striped table-bordered table-custom">
-        <thead>
-        <tr class="table-secondary">
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio Unitario</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-        <tr>
-            <td colspan="4" class="table-primary"><strong>Total General</strong></td>
-            <td id="totalGeneral" class="table-primary">0.00</td>
-            <td></td>
-        </tr>
-        </tfoot>
-    </table>
+<h2 class="mt-4">Total: <span id="totalGeneral">0.00</span></h2>
+<div id="mensajeError" class="alert alert-danger" style="display: none;"></div>
+
+<div class="d-flex gap-2 mt-4">
+    <button type="button" class="btn btn-efectivo btn-custom metodoPagoBtn" data-metodo="efectivo" id="efectivoBtn">Efectivo</button>
+    <button type="button" class="btn btn-tarjeta btn-custom metodoPagoBtn" data-metodo="tarjeta" id="tarjetaBtn">Tarjeta</button>
 </div>
-
-<!-- Botones para Métodos de Pago -->
-<div class="mb-4">
-    <button id="efectivoBtn" class="btn btn-custom btn-efectivo metodoPagoBtn" data-metodo="efectivo">Efectivo</button>
-    <button id="tarjetaBtn" class="btn btn-custom btn-tarjeta metodoPagoBtn" data-metodo="tarjeta">Tarjeta</button>
-</div>
-
-<button id="guardarVenta" class="btn btn-secondary mt-4" disabled>Guardar Venta</button>
 
 <!-- Contenedor para el modal -->
 <div id="modalContainer">
@@ -384,6 +400,11 @@
         </div>
     </div>
 
+</div>
+
+<button type="button" id="guardarVenta" class="btn btn-success mt-4">Guardar Venta</button>
+<div id="notificacionPago" style="display: none;">
+    <p id="mensajePago" style="color: green;"></p>
 </div>
 
 </body>

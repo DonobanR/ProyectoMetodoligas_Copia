@@ -31,24 +31,54 @@
 
 <script>
     $(document).ready(function () {
+        function actualizarEstadoBotonConfirmar() {
+            const montoRecibido = parseFloat($('#montoRecibido').val()) || 0;
+            const montoTotal = parseFloat($('#montoTotalModal').text()) || 0;
+
+            // Habilitar o deshabilitar el botón Confirmar
+            $('#confirmarPagoBtn').prop('disabled', montoRecibido < montoTotal);
+        }
+
         $('#montoRecibido').on('input', function () {
             const montoRecibido = parseFloat($(this).val()) || 0;
             const montoTotal = parseFloat($('#montoTotalModal').text()) || 0;
             const vuelto = montoRecibido - montoTotal;
+
             $('#vuelto').text(vuelto.toFixed(2));
+
+            // Actualizar el estado del botón Confirmar
+            actualizarEstadoBotonConfirmar();
         });
 
         $('#confirmarPagoBtn').click(function () {
-            // Emitir el evento personalizado para activar el botón de guardar venta
+            console.log('Botón Confirmar presionado');
+            const montoRecibido = parseFloat($('#montoRecibido').val()) || 0;
+            const montoTotal = parseFloat($('#montoTotalModal').text()) || 0;
 
-            $(document).trigger('confirmarPago');
-            $('#confirmarPagoModal').modal('hide');
+            if (montoRecibido >= montoTotal) {
+                // Emitir el evento personalizado
+                $(document).trigger('confirmarPago');
+                // Cerrar el modal
+                $('#confirmarPagoModal').modal('hide');
+            } else {
+                console.error('Monto recibido menor que el monto total.');
+            }
         });
 
         $('#cancelarPagoBtn').click(function () {
+            console.log('Botón Cancelar presionado');
             $('#confirmarPagoModal').modal('hide');
         });
+
+        // Inicializar el estado del botón Confirmar cuando la página se carga
+        actualizarEstadoBotonConfirmar();
+
+        // Escuchar el evento confirmarPago
+        $(document).on('confirmarPago', function() {
+            console.log('Evento confirmarPago recibido');
+        });
     });
+
 </script>
 
 </body>
